@@ -44,7 +44,7 @@ const github = {
     try {
       const f = await this.apiRequest('GET');
       if (!f) { this.setStatus('📄 Chưa có data', ''); return false; }
-      store.setAll(JSON.parse(atob(f.content)));
+      store.setAll(JSON.parse(decodeURIComponent(escape(atob(f.content)))));
       localStorage.setItem('ielts-github-sha', f.sha);
       this.setStatus('✅ Synced ' + new Date().toLocaleTimeString('vi-VN'), 'connected');
       return true;
