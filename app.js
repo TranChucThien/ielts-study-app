@@ -149,7 +149,8 @@ function refreshDashboard() {
   const settings = store.get('settings');
   $('#streak-count').textContent = streak.count + ' ngày';
   $('#fc-count').textContent = store.get('flashcards').length;
-  $('#notes-count').textContent = store.get('notes').length;
+  $('#vocab-count').textContent = store.get('vocabulary').length;
+  updateStatProgress();
   $('#target-band').value = settings.targetBand;
   renderHeatmap();
   loadChecklist();
@@ -161,6 +162,18 @@ function refreshDashboard() {
 $('#target-band').addEventListener('change', e => {
   const s = store.get('settings'); s.targetBand = e.target.value; store.set('settings', s); scheduleSync();
 });
+
+function updateStatProgress() {
+  const cards = store.get('flashcards');
+  const reviewed = cards.filter(c => c.lastReview && new Date(c.lastReview).toISOString().slice(0,10) === today()).length;
+  const fcPct = cards.length ? Math.min(100, (reviewed / cards.length) * 100) : 0;
+  $('#fc-progress-bar').style.width = fcPct + '%';
+
+  const vocab = store.get('vocabulary');
+  const todayVocab = vocab.filter(v => v.created && new Date(v.created).toISOString().slice(0,10) === today()).length;
+  const vocPct = vocab.length ? Math.min(100, (todayVocab / Math.max(vocab.length, 5)) * 100) : 0;
+  $('#vocab-progress-bar').style.width = vocPct + '%';
+}
 
 function renderHeatmap() {
   const hist = new Set(store.get('history'));
@@ -194,9 +207,9 @@ $$('#checklist input').forEach(cb => {
 });
 
 $('#sync-btn').addEventListener('click', async () => {
-  const btn = $('#sync-btn'); btn.disabled = true; btn.innerHTML = '<i class="lucide-refresh-cw"></i>...';
+  const btn = $('#sync-btn'); btn.disabled = true; btn.innerHTML = '<i class="icon-refresh-cw"></i>...';
   await github.push(); await github.pull(); refreshAll();
-  btn.disabled = false; btn.innerHTML = '<i class="lucide-refresh-cw"></i> Sync';
+  btn.disabled = false; btn.innerHTML = '<i class="icon-refresh-cw"></i> Sync';
   toast('Đồng bộ xong!');
 });
 
@@ -276,7 +289,7 @@ function renderFcList() {
   const deck = $('#fc-filter-deck').value;
   const cards = store.get('flashcards').filter(c => deck === 'all' || c.deck === deck);
   $('#fc-progress').textContent = `${cards.length} thẻ`;
-  if (!cards.length) { $('#fc-list').innerHTML = '<div class="empty-state">Chưa có flashcard nào</div>'; return; }
+  if (!cards.length) { $('#fc-list').innerHTML = '<div class="empty-state"><i class="icon-layers"></i>Chưa có flashcard nào<br><button class="btn-primary" onclick="$(\x27#fc-add-btn\x27).click()">+ Thêm flashcard</button></div>'; return; }
   $('#fc-list').innerHTML = cards.map(c => `
     <div class="fc-item">
       <span class="fc-item-front">${esc(c.front)}</span>
@@ -356,8 +369,8 @@ $('#fc-card').addEventListener('touchstart', e => { touchStartX = e.touches[0].c
 $('#fc-card').addEventListener('touchend', e => {
   const diff = e.changedTouches[0].clientX - touchStartX;
   if (Math.abs(diff) > 60) {
-    if (diff > 0) rateCard('easy');
-    else rateCard('hard');
+    fcStudyIdx++;
+    showStudyCard();
   }
 }, { passive: true });
 
@@ -414,7 +427,7 @@ function renderNotes() {
     .filter(n => n.skill === currentSkill)
     .filter(n => !filter || (n.title + n.content).toLowerCase().includes(filter))
     .sort((a, b) => b.date - a.date);
-  if (!notes.length) { $('#notes-list').innerHTML = '<div class="empty-state">Chưa có ghi chú nào</div>'; return; }
+  if (!notes.length) { $('#notes-list').innerHTML = '<div class="empty-state"><i class="icon-notebook-pen"></i>Chưa có ghi chú nào<br><button class="btn-primary" onclick="$(\x27#note-title\x27).focus()">+ Thêm ghi chú</button></div>'; return; }
   $('#notes-list').innerHTML = notes.map(n => `
     <div class="note-card">
       <h3>${esc(n.title)}</h3>
@@ -443,7 +456,7 @@ window.deleteNote = id => {
 };
 
 // ===== TIMER =====
-let timerInterval = null, timerSeconds = 0, timerTotal = 0, timerPaused = false;
+let timerInterval = null, timerSeconds = 0, timerTotal = 0, timerPaused = false, timerLabel = '';
 
 $$('.preset-btn:not(#custom-timer-btn)').forEach(btn => {
   btn.addEventListener('click', () => startTimer(+btn.dataset.time, btn.dataset.label));
@@ -456,7 +469,7 @@ $('#custom-timer-btn').addEventListener('click', () => {
 
 function startTimer(seconds, label) {
   clearInterval(timerInterval);
-  timerSeconds = seconds; timerTotal = seconds; timerPaused = false;
+  timerSeconds = seconds; timerTotal = seconds; timerPaused = false; timerLabel = label;
   $('#timer-label').textContent = label;
   $('#timer-clock').textContent = fmtTime(timerSeconds);
   updateRing();
@@ -472,6 +485,7 @@ function startTimer(seconds, label) {
     updateRing();
     if (timerSeconds <= 0) {
       clearInterval(timerInterval);
+      saveTimerSession();
       $('#timer-clock').textContent = 'Hết giờ!';
       toast('Hết giờ!');
       try { navigator.vibrate?.(500); } catch(e) {}
@@ -492,10 +506,34 @@ $('#timer-pause').addEventListener('click', () => {
 });
 
 $('#timer-stop').addEventListener('click', () => {
+  saveTimerSession();
   clearInterval(timerInterval);
   $('#timer-display').style.display = 'none';
   $('.timer-presets').style.display = 'block';
 });
+
+function saveTimerSession() {
+  const elapsed = timerTotal - timerSeconds;
+  if (elapsed < 5) return;
+  const hist = JSON.parse(localStorage.getItem('ielts-timer-history') || '[]');
+  hist.unshift({ label: timerLabel, duration: elapsed, total: timerTotal, date: Date.now() });
+  if (hist.length > 30) hist.length = 30;
+  localStorage.setItem('ielts-timer-history', JSON.stringify(hist));
+  renderTimerHistory();
+}
+
+function renderTimerHistory() {
+  const hist = JSON.parse(localStorage.getItem('ielts-timer-history') || '[]');
+  if (!hist.length) { $('#timer-history').innerHTML = '<div class="empty-state"><i class="icon-timer"></i>Chưa có lịch sử</div>'; return; }
+  $('#timer-history').innerHTML = hist.slice(0, 10).map(h => `
+    <div class="timer-entry">
+      <span class="timer-entry-label">${esc(h.label)}</span>
+      <span>${fmtTime(h.duration)} / ${fmtTime(h.total)}</span>
+      <span class="timer-entry-meta">${new Date(h.date).toLocaleDateString('vi-VN')}</span>
+    </div>`).join('');
+}
+
+renderTimerHistory();
 
 // ===== CALENDAR =====
 let calYear, calMonth, calSelectedDate = null;
@@ -606,7 +644,7 @@ function renderSessions(dateStr) {
   const moodLabels = { great: 'Rất tốt', good: 'Tốt', ok: 'Bình thường', bad: 'Chưa tốt' };
 
   if (!sessions.length) {
-    $('#ses-list').innerHTML = '<div class="empty-state">Chưa có ghi chú buổi học</div>';
+    $('#ses-list').innerHTML = '<div class="empty-state"><i class="icon-calendar-days"></i>Chưa có ghi chú buổi học</div>';
     return;
   }
 
@@ -787,7 +825,7 @@ function renderVocab() {
     .sort((a, b) => (b.created || 0) - (a.created || 0));
 
   $('#voc-count').textContent = `${vocab.length} từ`;
-  if (!vocab.length) { $('#voc-list').innerHTML = '<div class="empty-state">Chưa có từ vựng nào</div>'; return; }
+  if (!vocab.length) { $('#voc-list').innerHTML = '<div class="empty-state"><i class="icon-book-open"></i>Chưa có từ vựng nào<br><button class="btn-primary" onclick="$(\x27#voc-add-btn\x27).click()">+ Thêm từ</button></div>'; return; }
 
   $('#voc-list').innerHTML = vocab.map(v => `
     <div class="voc-card">
@@ -826,8 +864,14 @@ window.editVoc = id => {
 
 window.deleteVoc = id => {
   if (!confirm('Xoá từ này?')) return;
-  store.set('vocabulary', store.get('vocabulary').filter(v => v.id !== id));
-  renderVocab(); scheduleSync();
+  const vocab = store.get('vocabulary');
+  const v = vocab.find(v => v.id === id);
+  if (v) {
+    const cards = store.get('flashcards').filter(c => c.front !== v.word);
+    store.set('flashcards', cards);
+  }
+  store.set('vocabulary', vocab.filter(v => v.id !== id));
+  renderVocab(); renderFcList(); refreshDashboard(); scheduleSync();
 };
 
 // Sample data
@@ -894,7 +938,8 @@ $('#score-add').addEventListener('click', () => {
 
 function renderScores() {
   const scores = store.get('scores').sort((a, b) => b.created - a.created);
-  if (!scores.length) { $('#score-history').innerHTML = '<div class="empty-state">Chưa có điểm nào</div>'; return; }
+  if (!scores.length) { $('#score-chart').style.display = 'none'; $('#score-history').innerHTML = '<div class="empty-state"><i class="icon-trending-up"></i>Chưa có điểm nào</div>'; return; }
+  renderScoreChart(scores);
   $('#score-history').innerHTML = scores.map(s => `
     <div class="score-entry">
       <div class="score-entry-header">
@@ -916,6 +961,26 @@ window.deleteScore = id => {
   store.set('scores', store.get('scores').filter(s => s.id !== id));
   renderScores(); scheduleSync();
 };
+
+function renderScoreChart(scores) {
+  const sorted = [...scores].sort((a, b) => a.created - b.created).slice(-10);
+  if (sorted.length < 2) { $('#score-chart').style.display = 'none'; return; }
+  $('#score-chart').style.display = 'block';
+  const max = 9;
+  $('#score-chart-body').innerHTML = sorted.map(s => {
+    const h = v => Math.max(2, (v / max) * 100);
+    return `<div class="score-bar-group">
+      <div class="score-bar-cols">
+        <div class="score-bar bar-l" style="height:${h(s.l)}%" title="L: ${s.l}"></div>
+        <div class="score-bar bar-r" style="height:${h(s.r)}%" title="R: ${s.r}"></div>
+        <div class="score-bar bar-w" style="height:${h(s.w)}%" title="W: ${s.w}"></div>
+        <div class="score-bar bar-s" style="height:${h(s.s)}%" title="S: ${s.s}"></div>
+      </div>
+      <span class="score-bar-overall">${s.overall}</span>
+      <span class="score-bar-date">${new Date(s.date).toLocaleDateString('vi-VN', {day:'2-digit',month:'2-digit'})}</span>
+    </div>`;
+  }).join('') + '<div class="score-chart-legend"><span class="leg-l">L</span><span class="leg-r">R</span><span class="leg-w">W</span><span class="leg-s">S</span></div>';
+}
 
 // ===== SETTINGS =====
 function loadGithubConfig() {

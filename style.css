@@ -218,15 +218,21 @@ main {
   overflow: hidden;
 }
 
-.grad-blue { background: linear-gradient(135deg, #1e3a5f, #162040); }
-.grad-orange { background: linear-gradient(135deg, #5a2d0c, #2a1a0a); }
-.grad-purple { background: linear-gradient(135deg, #3b2069, #1a1540); }
-.grad-green { background: linear-gradient(135deg, #14432a, #0a1a15); }
+.grad-cyan { background: linear-gradient(135deg, rgba(6,182,212,0.25), rgba(8,145,178,0.15)); }
+.grad-warm { background: linear-gradient(135deg, rgba(251,146,60,0.25), rgba(234,88,12,0.15)); }
+.grad-indigo { background: linear-gradient(135deg, rgba(129,140,248,0.25), rgba(99,102,241,0.15)); }
+.grad-emerald { background: linear-gradient(135deg, rgba(52,211,153,0.25), rgba(16,185,129,0.15)); }
 
 .stat-icon { font-size: 1.8rem; }
 .stat-icon i { font-size: 1.8rem; }
-.stat-label { font-size: 0.65rem; color: var(--text2); display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-label { font-size: 0.65rem; color: rgba(255,255,255,0.7); display: block; text-transform: uppercase; letter-spacing: 0.5px; }
 .stat-value { font-size: 1.2rem; font-weight: 700; }
+
+.stat-progress-row { display: flex; align-items: center; gap: 0.5rem; }
+.stat-progress-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+.stat-progress-fill { height: 100%; border-radius: 2px; transition: width 0.4s ease; }
+.grad-indigo .stat-progress-fill { background: rgba(129,140,248,0.8); }
+.grad-emerald .stat-progress-fill { background: rgba(52,211,153,0.8); }
 
 .stat-card select {
   background: rgba(255,255,255,0.08);
@@ -449,7 +455,20 @@ textarea { resize: vertical; min-height: 80px; }
 
 .btn-rate span { font-size: 0.7rem; }
 
-#fc-study-progress { text-align: center; color: var(--text2); font-size: 0.8rem; }
+#fc-study-progress { text-align: center; color: var(--text2); font-size: 0.8rem; margin: 1.2rem 0 0.8rem; }
+
+.fc-study-controls {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+}
+
+.fc-study-controls .btn-primary,
+.fc-study-controls .btn-secondary {
+  flex: 1;
+  max-width: 200px;
+  text-align: center;
+}
 
 .fc-item {
   display: flex;
@@ -958,6 +977,31 @@ textarea { resize: vertical; min-height: 80px; }
 }
 .score-entry-actions button:hover { opacity: 1; }
 
+/* Score Chart */
+.score-chart-body { display: flex; align-items: flex-end; gap: 0.4rem; height: 140px; padding-top: 0.5rem; overflow-x: auto; }
+.score-bar-group { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; min-width: 50px; flex-shrink: 0; }
+.score-bar-cols { display: flex; align-items: flex-end; gap: 2px; height: 100px; }
+.score-bar { width: 10px; border-radius: 3px 3px 0 0; min-height: 2px; transition: height 0.3s; }
+.score-bar.bar-l { background: #67e8f9; }
+.score-bar.bar-r { background: #c4b5fd; }
+.score-bar.bar-w { background: #fde68a; }
+.score-bar.bar-s { background: #fda4af; }
+.score-bar-date { font-size: 0.55rem; color: var(--text2); }
+.score-bar-overall { font-size: 0.65rem; font-weight: 700; color: var(--accent); }
+.score-chart-legend { display: flex; gap: 0.8rem; margin-top: 0.5rem; justify-content: center; }
+.score-chart-legend span { font-size: 0.6rem; color: var(--text2); display: flex; align-items: center; gap: 0.25rem; }
+.score-chart-legend span::before { content: ''; width: 8px; height: 8px; border-radius: 2px; }
+.score-chart-legend .leg-l::before { background: #67e8f9; }
+.score-chart-legend .leg-r::before { background: #c4b5fd; }
+.score-chart-legend .leg-w::before { background: #fde68a; }
+.score-chart-legend .leg-s::before { background: #fda4af; }
+
+/* Timer History */
+.timer-entry { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+.timer-entry:last-child { border-bottom: none; }
+.timer-entry-label { font-weight: 600; }
+.timer-entry-meta { color: var(--text2); font-size: 0.7rem; }
+
 /* ===== SETTINGS ===== */
 #gh-status {
   margin-top: 0.5rem;
@@ -971,6 +1015,8 @@ textarea { resize: vertical; min-height: 80px; }
 #gh-status.error { display: block; background: #7f1d1d; color: #fca5a5; }
 
 .empty-state { text-align: center; padding: 2.5rem 1rem; color: #405070; font-size: 0.95rem; }
+.empty-state i { font-size: 2rem; display: block; margin-bottom: 0.5rem; opacity: 0.4; }
+.empty-state .btn-primary { margin-top: 0.8rem; font-size: 0.8rem; padding: 0.5rem 1rem; }
 
 /* ===== TOAST ===== */
 .toast {

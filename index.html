@@ -50,7 +50,7 @@
       </div>
 
       <div class="dashboard-grid">
-        <div class="card stat-card grad-blue">
+        <div class="card stat-card grad-cyan">
           <div class="stat-icon"><i class="icon-target"></i></div>
           <div class="stat-info">
             <span class="stat-label">Mục tiêu</span>
@@ -63,25 +63,31 @@
             </select>
           </div>
         </div>
-        <div class="card stat-card grad-orange">
+        <div class="card stat-card grad-warm">
           <div class="stat-icon"><i class="icon-flame"></i></div>
           <div class="stat-info">
             <span class="stat-label">Streak</span>
             <span class="stat-value" id="streak-count">0 ngày</span>
           </div>
         </div>
-        <div class="card stat-card grad-purple">
+        <div class="card stat-card grad-indigo">
           <div class="stat-icon"><i class="icon-layers"></i></div>
           <div class="stat-info">
             <span class="stat-label">Flashcards</span>
-            <span class="stat-value" id="fc-count">0</span>
+            <div class="stat-progress-row">
+              <span class="stat-value" id="fc-count">0</span>
+              <div class="stat-progress-bar"><div class="stat-progress-fill" id="fc-progress-bar"></div></div>
+            </div>
           </div>
         </div>
-        <div class="card stat-card grad-green">
-          <div class="stat-icon"><i class="icon-notebook-pen"></i></div>
+        <div class="card stat-card grad-emerald">
+          <div class="stat-icon"><i class="icon-book-open"></i></div>
           <div class="stat-info">
-            <span class="stat-label">Notes</span>
-            <span class="stat-value" id="notes-count">0</span>
+            <span class="stat-label">Vocabulary</span>
+            <div class="stat-progress-row">
+              <span class="stat-value" id="vocab-count">0</span>
+              <div class="stat-progress-bar"><div class="stat-progress-fill" id="vocab-progress-bar"></div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -174,8 +180,10 @@
         </div>
 
         <div id="fc-study-progress"></div>
-        <button id="fc-next-card" class="btn-primary" style="width:100%"><i class="icon-skip-forward"></i> Thẻ tiếp</button>
-        <button id="fc-exit-study" class="btn-secondary" style="margin-top:0.5rem;width:100%">✕ Thoát</button>
+        <div class="fc-study-controls">
+          <button id="fc-exit-study" class="btn-secondary">✕ Thoát</button>
+          <button id="fc-next-card" class="btn-primary"><i class="icon-skip-forward"></i> Thẻ tiếp</button>
+        </div>
       </div>
       <div id="fc-list"></div>
     </section>
@@ -265,9 +273,13 @@
           <div id="timer-clock">00:00</div>
         </div>
         <div class="timer-actions">
-          <button id="timer-pause" class="btn-secondary btn-lg">⏸ Tạm dừng</button>
-          <button id="timer-stop" class="btn-hard btn-lg">⏹ Dừng</button>
+          <button id="timer-pause" class="btn-secondary btn-lg"><i class="icon-pause"></i> Tạm dừng</button>
+          <button id="timer-stop" class="btn-hard btn-lg"><i class="icon-square"></i> Dừng</button>
         </div>
+      </div>
+      <div class="card" style="margin-top:1rem">
+        <h3><i class="icon-history"></i> Lịch sử</h3>
+        <div id="timer-history"></div>
       </div>
     </section>
 
@@ -392,6 +404,10 @@
           </div>
           <button id="score-add" class="btn-primary">Lưu điểm</button>
         </div>
+      </div>
+      <div id="score-chart" class="card" style="display:none">
+        <h3><i class="icon-bar-chart-3"></i> Xu hướng điểm</h3>
+        <div id="score-chart-body" class="score-chart-body"></div>
       </div>
       <div id="score-history"></div>
     </section>
