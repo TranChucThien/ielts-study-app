@@ -1083,7 +1083,63 @@ $('#reset-btn').addEventListener('click', () => {
   refreshAll(); scheduleSync(); toast('Đã xoá!');
 });
 
+// ===== SEED SAMPLE DATA =====
+function seedSampleData() {
+  const isFirstLoad = !DATA_KEYS.some(k => localStorage.getItem('ielts-' + k));
+  if (!isFirstLoad) return;
+
+  const d = n => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+  const t = n => Date.now() - n * 86400000;
+
+  // Vocabulary + Flashcards
+  const vocab = [], cards = [];
+  SAMPLE_VOCAB.forEach((s, i) => {
+    const id = 'sv' + i;
+    vocab.push({ ...s, id, created: t(Math.floor(i / 3)) });
+    cards.push({ id: 'sf' + i, front: s.word, back: s.meaning, example: s.example, deck: 'general', score: Math.floor(Math.random() * 5) - 1, lastReview: i < 10 ? t(i % 3) : null });
+  });
+
+  // Notes
+  const notes = [
+    { id: 'sn1', skill: 'listening', title: 'Section 4 tips', content: 'Đọc trước câu hỏi trong 30s break.\nChú ý signal words: however, on the other hand.\nViết tắt khi nghe, hoàn thiện sau.', tag: 'tip', date: t(1) },
+    { id: 'sn2', skill: 'writing', title: 'Task 2 template', content: 'Introduction: Paraphrase + thesis statement\nBody 1: Main idea + example\nBody 2: Counter argument + refutation\nConclusion: Restate + recommendation', tag: 'template', date: t(2) },
+    { id: 'sn3', skill: 'reading', title: 'Lỗi hay mắc - True/False/NG', content: 'NOT GIVEN ≠ FALSE.\nNếu passage không đề cập → NG.\nNếu passage nói ngược lại → FALSE.', tag: 'mistake', date: t(0) },
+    { id: 'sn4', skill: 'speaking', title: 'Part 2 - Describe a place', content: 'Where: Da Lat city\nWhen: Last summer\nWhat: Pine forests, flower gardens, Xuan Huong lake\nWhy memorable: Cool weather, peaceful atmosphere', tag: 'tip', date: t(3) },
+    { id: 'sn5', skill: 'vocabulary', title: 'Collocations hay gặp', content: 'make progress, take measures, raise awareness\npay attention, draw conclusions, pose a threat', tag: 'vocab', date: t(1) },
+  ];
+
+  // Scores
+  const scores = [
+    { id: 'ss1', date: d(14), l: 5.5, r: 5, w: 5, s: 5.5, overall: 5.5, created: t(14) },
+    { id: 'ss2', date: d(7), l: 6, r: 5.5, w: 5.5, s: 6, overall: 5.5, created: t(7) },
+    { id: 'ss3', date: d(1), l: 6.5, r: 6, w: 6, s: 6, overall: 6, created: t(1) },
+  ];
+
+  // Sessions
+  const sessions = [
+    { id: 'se1', date: d(1), title: 'Listening Practice #3', content: 'Cambridge 17 Test 2 - Section 3,4\nĐúng 28/40. Cần cải thiện section 4.', skills: ['listening'], mood: 'good', created: t(1) },
+    { id: 'se2', date: d(2), title: 'Writing Task 2', content: 'Topic: Technology in education\nViết xong trong 38 phút. Cần check grammar kỹ hơn.', skills: ['writing', 'vocabulary'], mood: 'ok', created: t(2) },
+    { id: 'se3', date: d(0), title: 'Vocab + Reading', content: 'Học 10 từ mới topic Environment.\nLàm 1 passage True/False/NG.', skills: ['reading', 'vocabulary'], mood: 'great', created: t(0) },
+  ];
+
+  // Streak & History
+  const history = [d(0), d(1), d(2), d(3), d(5), d(7), d(8), d(14)];
+  const streak = { count: 4, lastDate: d(0) };
+
+  // Checklist
+  const checklist = [
+    { date: d(0), items: { vocab: true, listen: true, read: false, write: false, speak: false } },
+    { date: d(1), items: { vocab: true, listen: true, read: true, write: true, speak: false } },
+  ];
+
+  const settings = { targetBand: '6.5' };
+
+  store.setAll({ vocabulary: vocab, flashcards: cards, notes, scores, sessions, streak, history, checklist, settings });
+  toast('Chào mừng! Dữ liệu mẫu đã được tải.');
+}
+
 // ===== INIT =====
+seedSampleData();
 loadGithubConfig();
 initCalendar();
 refreshAll();
