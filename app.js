@@ -672,43 +672,57 @@ $('#cal-grid')?.addEventListener('touchend', e => {
 // ===== VOCABULARY =====
 let vocEditId = null;
 
-$('#voc-add-btn').addEventListener('click', () => {
-  $('#voc-form').style.display = 'block'; vocEditId = null;
-  $('#voc-word').value = ''; $('#voc-meaning').value = ''; $('#voc-phonetic').value = '';
-  $('#voc-example').value = ''; $('#voc-synonym').value = ''; $('#voc-type').value = ''; $('#voc-topic').value = 'other';
-  $('#voc-word').focus();
+document.getElementById('voc-add-btn').addEventListener('click', function() {
+  document.getElementById('voc-form').style.display = 'block';
+  vocEditId = null;
+  document.getElementById('voc-word').value = '';
+  document.getElementById('voc-meaning').value = '';
+  document.getElementById('voc-phonetic').value = '';
+  document.getElementById('voc-example').value = '';
+  document.getElementById('voc-synonym').value = '';
+  document.getElementById('voc-type').value = '';
+  document.getElementById('voc-topic').value = 'other';
+  document.getElementById('voc-word').focus();
 });
 
-$('#voc-cancel').addEventListener('click', () => { $('#voc-form').style.display = 'none'; });
+document.getElementById('voc-cancel').addEventListener('click', function() {
+  document.getElementById('voc-form').style.display = 'none';
+});
 
-$('#voc-save').addEventListener('click', () => {
-  const word = $('#voc-word').value.trim(), meaning = $('#voc-meaning').value.trim();
-  if (!word || !meaning) return;
-  const vocab = store.get('vocabulary');
-  const entry = {
-    word, meaning,
-    type: $('#voc-type').value,
-    phonetic: $('#voc-phonetic').value.trim(),
-    example: $('#voc-example').value.trim(),
-    synonyms: $('#voc-synonym').value.trim().split(',').map(s => s.trim()).filter(Boolean),
-    topic: $('#voc-topic').value
+document.getElementById('voc-save').addEventListener('click', function() {
+  var wordEl = document.getElementById('voc-word');
+  var meaningEl = document.getElementById('voc-meaning');
+  var word = wordEl.value.trim();
+  var meaning = meaningEl.value.trim();
+  if (!word || !meaning) { toast('Cần nhập từ và nghĩa!'); return; }
+
+  var vocab = store.get('vocabulary');
+  var entry = {
+    word: word,
+    meaning: meaning,
+    type: document.getElementById('voc-type').value,
+    phonetic: document.getElementById('voc-phonetic').value.trim(),
+    example: document.getElementById('voc-example').value.trim(),
+    synonyms: document.getElementById('voc-synonym').value.trim().split(',').map(function(s) { return s.trim(); }).filter(Boolean),
+    topic: document.getElementById('voc-topic').value
   };
+
   if (vocEditId) {
-    const v = vocab.find(v => v.id === vocEditId);
+    var v = vocab.find(function(v) { return v.id === vocEditId; });
     if (v) Object.assign(v, entry);
     vocEditId = null;
   } else {
     entry.id = crypto.randomUUID();
     entry.created = Date.now();
     vocab.push(entry);
-    // Also add to flashcards
-    const cards = store.get('flashcards');
+    var cards = store.get('flashcards');
     cards.push({ id: crypto.randomUUID(), front: word, back: meaning, example: entry.example, deck: 'general', score: 0, lastReview: null });
     store.set('flashcards', cards);
   }
+
   store.set('vocabulary', vocab);
-  $('#voc-form').style.display = 'none';
-  renderVocab(); refreshDashboard(); recordStudy(); scheduleSync();
+  document.getElementById('voc-form').style.display = 'none';
+  renderVocab(); renderFcList(); refreshDashboard(); recordStudy(); scheduleSync();
   toast('✅ Đã lưu từ vựng!');
 });
 
