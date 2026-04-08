@@ -10,30 +10,30 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/lucide-static@latest/font/lucide.css">
 </head>
 <body>
   <!-- SIDEBAR (desktop) -->
   <nav id="sidebar">
-    <div class="logo">🎯 IELTS Hub</div>
-    <button class="nav-btn active" data-page="dashboard">📊 Dashboard</button>
-    <button class="nav-btn" data-page="flashcards">🃏 Flashcards</button>
-    <button class="nav-btn" data-page="notes">📝 Notes</button>
-    <button class="nav-btn" data-page="timer">⏱️ Timer</button>
-    <button class="nav-btn" data-page="calendar">📅 Calendar</button>
-    <button class="nav-btn" data-page="vocab">📚 Vocabulary</button>
-    <button class="nav-btn" data-page="settings">⚙️ Settings</button>
-    <div class="sync-status" id="sync-status">⏸ Chưa kết nối</div>
+    <div class="logo"><i class="icon-graduation-cap"></i> IELTS Hub</div>
+    <button class="nav-btn active" data-page="dashboard"><i class="icon-layout-dashboard"></i> Dashboard</button>
+    <button class="nav-btn" data-page="vocab"><i class="icon-book-open"></i> Vocabulary</button>
+    <button class="nav-btn" data-page="flashcards"><i class="icon-layers"></i> Flashcards</button>
+    <button class="nav-btn" data-page="notes"><i class="icon-notebook-pen"></i> Notes</button>
+    <button class="nav-btn" data-page="scores"><i class="icon-trending-up"></i> Scores</button>
+    <button class="nav-btn" data-page="timer"><i class="icon-timer"></i> Timer</button>
+    <button class="nav-btn" data-page="calendar"><i class="icon-calendar-days"></i> Calendar</button>
+    <button class="nav-btn" data-page="settings"><i class="icon-settings"></i> Settings</button>
+    <div class="sync-status" id="sync-status"><i class="icon-cloud-off"></i> Chưa kết nối</div>
   </nav>
 
   <!-- BOTTOM NAV (mobile) -->
   <nav id="bottom-nav">
-    <button class="bnav active" data-page="dashboard">📊<span>Home</span></button>
-    <button class="bnav" data-page="flashcards">🃏<span>Cards</span></button>
-    <button class="bnav" data-page="notes">📝<span>Notes</span></button>
-    <button class="bnav" data-page="timer">⏱️<span>Timer</span></button>
-    <button class="bnav" data-page="calendar">📅<span>Calendar</span></button>
-    <button class="bnav" data-page="vocab">📚<span>Vocab</span></button>
-    <button class="bnav" data-page="settings">⚙️<span>More</span></button>
+    <button class="bnav active" data-page="dashboard"><i class="icon-layout-dashboard"></i><span>Home</span></button>
+    <button class="bnav" data-page="vocab"><i class="icon-book-open"></i><span>Vocab</span></button>
+    <button class="bnav" data-page="flashcards"><i class="icon-layers"></i><span>Cards</span></button>
+    <button class="bnav" data-page="scores"><i class="icon-trending-up"></i><span>Scores</span></button>
+    <button class="bnav" data-page="settings"><i class="icon-settings"></i><span>More</span></button>
   </nav>
 
   <main>
@@ -41,7 +41,7 @@
     <section id="page-dashboard" class="page active">
       <div class="page-header">
         <h2>Dashboard</h2>
-        <button id="sync-btn" class="btn-sync" title="Đồng bộ">🔄 Sync</button>
+        <button id="sync-btn" class="btn-sync" title="Đồng bộ"><i class="icon-refresh-cw"></i> Sync</button>
       </div>
 
       <!-- Quote -->
@@ -51,7 +51,7 @@
 
       <div class="dashboard-grid">
         <div class="card stat-card grad-blue">
-          <div class="stat-icon">🎯</div>
+          <div class="stat-icon"><i class="icon-target"></i></div>
           <div class="stat-info">
             <span class="stat-label">Mục tiêu</span>
             <select id="target-band">
@@ -64,21 +64,21 @@
           </div>
         </div>
         <div class="card stat-card grad-orange">
-          <div class="stat-icon">🔥</div>
+          <div class="stat-icon"><i class="icon-flame"></i></div>
           <div class="stat-info">
             <span class="stat-label">Streak</span>
             <span class="stat-value" id="streak-count">0 ngày</span>
           </div>
         </div>
         <div class="card stat-card grad-purple">
-          <div class="stat-icon">🃏</div>
+          <div class="stat-icon"><i class="icon-layers"></i></div>
           <div class="stat-info">
             <span class="stat-label">Flashcards</span>
             <span class="stat-value" id="fc-count">0</span>
           </div>
         </div>
         <div class="card stat-card grad-green">
-          <div class="stat-icon">📝</div>
+          <div class="stat-icon"><i class="icon-notebook-pen"></i></div>
           <div class="stat-info">
             <span class="stat-label">Notes</span>
             <span class="stat-value" id="notes-count">0</span>
@@ -88,20 +88,20 @@
 
       <!-- Word of the day -->
       <div class="card wotd-card" id="wotd-card" style="display:none">
-        <div class="wotd-label">💡 Từ vựng hôm nay</div>
+        <div class="wotd-label"><i class="icon-lightbulb"></i> Từ vựng hôm nay</div>
         <div class="wotd-word" id="wotd-word"></div>
         <div class="wotd-meaning" id="wotd-meaning"></div>
         <div class="wotd-example" id="wotd-example"></div>
-        <button class="wotd-refresh" onclick="pickWotd()">🔀 Từ khác</button>
+        <button class="wotd-refresh" onclick="pickWotd()"><i class="icon-shuffle"></i> Từ khác</button>
       </div>
 
       <div class="card">
-        <h3>📅 90 ngày gần nhất</h3>
+        <h3><i class="icon-calendar-days"></i> 90 ngày gần nhất</h3>
         <div id="heatmap"></div>
       </div>
 
       <div class="card">
-        <h3>✅ Hôm nay</h3>
+        <h3><i class="icon-check-circle"></i> Hôm nay</h3>
         <div id="checklist">
           <label class="check-item"><input type="checkbox" data-check="vocab"><span>Học từ vựng</span></label>
           <label class="check-item"><input type="checkbox" data-check="listen"><span>Listening</span></label>
@@ -158,9 +158,9 @@
           </div>
         </div>
         <div class="fc-study-actions">
-          <button onclick="rateCard('hard')" class="btn-rate btn-hard">😣<span>Khó</span></button>
-          <button onclick="rateCard('ok')" class="btn-rate btn-ok">🤔<span>Tạm</span></button>
-          <button onclick="rateCard('easy')" class="btn-rate btn-easy">😎<span>Dễ</span></button>
+          <button onclick="rateCard('hard')" class="btn-rate btn-hard"><i class="icon-thumbs-down"></i><span>Khó</span></button>
+          <button onclick="rateCard('ok')" class="btn-rate btn-ok"><i class="icon-minus"></i><span>Tạm</span></button>
+          <button onclick="rateCard('easy')" class="btn-rate btn-easy"><i class="icon-thumbs-up"></i><span>Dễ</span></button>
         </div>
         <div id="fc-study-progress"></div>
         <button id="fc-exit-study" class="btn-secondary" style="margin-top:0.5rem;width:100%">✕ Thoát</button>
@@ -172,23 +172,23 @@
     <section id="page-notes" class="page">
       <h2>Notes</h2>
       <div class="tabs">
-        <button class="tab active" data-skill="listening">🎧 Listening</button>
-        <button class="tab" data-skill="reading">📖 Reading</button>
-        <button class="tab" data-skill="writing">✍️ Writing</button>
-        <button class="tab" data-skill="speaking">🗣️ Speaking</button>
-        <button class="tab" data-skill="vocabulary">📚 Vocab</button>
+        <button class="tab active" data-skill="listening"><i class="icon-headphones"></i> Listening</button>
+        <button class="tab" data-skill="reading"><i class="icon-book-open-text"></i> Reading</button>
+        <button class="tab" data-skill="writing"><i class="icon-pen-line"></i> Writing</button>
+        <button class="tab" data-skill="speaking"><i class="icon-mic"></i> Speaking</button>
+        <button class="tab" data-skill="vocabulary"><i class="icon-book-open"></i> Vocab</button>
       </div>
-      <input type="text" id="note-search" placeholder="🔍 Tìm kiếm...">
+      <input type="text" id="note-search" placeholder="Tìm kiếm...">
       <div class="card note-form">
         <input type="text" id="note-title" placeholder="Tiêu đề">
         <textarea id="note-content" placeholder="Nội dung ghi chú..." rows="4"></textarea>
         <select id="note-tag">
           <option value="">-- Tag --</option>
-          <option value="tip">💡 Tip</option>
-          <option value="mistake">❌ Lỗi hay mắc</option>
-          <option value="template">📋 Template</option>
-          <option value="vocab">📚 Từ vựng</option>
-          <option value="grammar">📐 Ngữ pháp</option>
+          <option value="tip"><i class="icon-lightbulb"></i> Tip</option>
+          <option value="mistake">Lỗi hay mắc</option>
+          <option value="template">Template</option>
+          <option value="vocab">Từ vựng</option>
+          <option value="grammar">Ngữ pháp</option>
         </select>
         <button id="note-add" class="btn-primary">Thêm ghi chú</button>
       </div>
@@ -199,7 +199,7 @@
     <section id="page-timer" class="page">
       <h2>Timer</h2>
       <div class="timer-presets">
-        <h3>✍️ Writing</h3>
+        <h3><i class="icon-pen-line"></i> Writing</h3>
         <div class="preset-grid">
           <button class="preset-btn" data-time="1200" data-label="Writing Task 1">
             <span class="preset-time">20:00</span>
@@ -210,7 +210,7 @@
             <span class="preset-name">Task 2</span>
           </button>
         </div>
-        <h3>🗣️ Speaking</h3>
+        <h3><i class="icon-mic"></i> Speaking</h3>
         <div class="preset-grid">
           <button class="preset-btn" data-time="300" data-label="Speaking Part 1">
             <span class="preset-time">5:00</span>
@@ -225,7 +225,7 @@
             <span class="preset-name">Part 3</span>
           </button>
         </div>
-        <h3>🎧📖 Full Test</h3>
+        <h3><i class="icon-headphones"></i><i class="icon-book-open-text"></i> Full Test</h3>
         <div class="preset-grid">
           <button class="preset-btn" data-time="1800" data-label="Listening">
             <span class="preset-time">30:00</span>
@@ -236,7 +236,7 @@
             <span class="preset-name">Reading</span>
           </button>
         </div>
-        <h3>⚙️ Tuỳ chỉnh</h3>
+        <h3><i class="icon-sliders-horizontal"></i> Tuỳ chỉnh</h3>
         <div class="custom-timer">
           <input type="number" id="custom-min" placeholder="Phút" min="1" max="180" value="25">
           <span>phút</span>
@@ -261,7 +261,7 @@
 
     <!-- CALENDAR -->
     <section id="page-calendar" class="page">
-      <h2>📅 Study Calendar</h2>
+      <h2><i class="icon-calendar-days"></i> Study Calendar</h2>
       <div class="cal-header">
         <button id="cal-prev" class="cal-nav">‹</button>
         <span id="cal-title"></span>
@@ -283,18 +283,18 @@
           <input type="text" id="ses-title" placeholder="Tiêu đề buổi học (VD: Listening Practice #5)">
           <textarea id="ses-content" placeholder="Ghi chú buổi học..." rows="4"></textarea>
           <div class="ses-skills">
-            <label class="ses-skill-tag"><input type="checkbox" value="listening"> 🎧 L</label>
-            <label class="ses-skill-tag"><input type="checkbox" value="reading"> 📖 R</label>
-            <label class="ses-skill-tag"><input type="checkbox" value="writing"> ✍️ W</label>
-            <label class="ses-skill-tag"><input type="checkbox" value="speaking"> 🗣️ S</label>
-            <label class="ses-skill-tag"><input type="checkbox" value="vocabulary"> 📚 V</label>
+            <label class="ses-skill-tag"><input type="checkbox" value="listening"> <i class="icon-headphones"></i> L</label>
+            <label class="ses-skill-tag"><input type="checkbox" value="reading"> <i class="icon-book-open-text"></i> R</label>
+            <label class="ses-skill-tag"><input type="checkbox" value="writing"> <i class="icon-pen-line"></i> W</label>
+            <label class="ses-skill-tag"><input type="checkbox" value="speaking"> <i class="icon-mic"></i> S</label>
+            <label class="ses-skill-tag"><input type="checkbox" value="vocabulary"> <i class="icon-book-open"></i> V</label>
           </div>
           <select id="ses-mood">
             <option value="">-- Cảm nhận --</option>
-            <option value="great">🔥 Rất tốt</option>
-            <option value="good">😊 Tốt</option>
-            <option value="ok">😐 Bình thường</option>
-            <option value="bad">😣 Chưa tốt</option>
+            <option value="great">Rất tốt</option>
+            <option value="good">Tốt</option>
+            <option value="ok">Bình thường</option>
+            <option value="bad">Chưa tốt</option>
           </select>
           <button id="ses-add" class="btn-primary">Lưu buổi học</button>
         </div>
@@ -304,23 +304,23 @@
 
     <!-- VOCABULARY -->
     <section id="page-vocab" class="page">
-      <h2>📚 Vocabulary</h2>
+      <h2><i class="icon-book-open"></i> Vocabulary</h2>
       <div class="fc-controls">
         <button id="voc-add-btn" class="btn-primary">+ Thêm từ</button>
-        <button id="voc-sample-btn" class="btn-secondary">📦 Import mẫu</button>
+        <button id="voc-sample-btn" class="btn-secondary"><i class="icon-package"></i> Import mẫu</button>
         <select id="voc-filter-topic" class="deck-filter">
           <option value="all">Tất cả topic</option>
-          <option value="environment">🌍 Environment</option>
-          <option value="education">🎓 Education</option>
-          <option value="technology">💻 Technology</option>
-          <option value="health">🏥 Health</option>
-          <option value="society">👥 Society</option>
-          <option value="work">💼 Work</option>
-          <option value="other">📌 Other</option>
+          <option value="environment">Environment</option>
+          <option value="education">Education</option>
+          <option value="technology">Technology</option>
+          <option value="health">Health</option>
+          <option value="society">Society</option>
+          <option value="work">Work</option>
+          <option value="other">Other</option>
         </select>
         <span id="voc-count"></span>
       </div>
-      <input type="text" id="voc-search" placeholder="🔍 Tìm từ vựng...">
+      <input type="text" id="voc-search" placeholder="Tìm từ vựng...">
       <div id="voc-form" class="card" style="display:none">
         <input type="text" id="voc-word" placeholder="Từ vựng (VD: deteriorate)">
         <select id="voc-type">
@@ -337,13 +337,13 @@
         <textarea id="voc-example" placeholder="Ví dụ..." rows="2"></textarea>
         <input type="text" id="voc-synonym" placeholder="Từ đồng nghĩa (cách nhau bởi dấu phẩy)">
         <select id="voc-topic">
-          <option value="other">📌 Other</option>
-          <option value="environment">🌍 Environment</option>
-          <option value="education">🎓 Education</option>
-          <option value="technology">💻 Technology</option>
-          <option value="health">🏥 Health</option>
-          <option value="society">👥 Society</option>
-          <option value="work">💼 Work</option>
+          <option value="other">Other</option>
+          <option value="environment">Environment</option>
+          <option value="education">Education</option>
+          <option value="technology">Technology</option>
+          <option value="health">Health</option>
+          <option value="society">Society</option>
+          <option value="work">Work</option>
         </select>
         <div class="form-actions">
           <button id="voc-save" class="btn-primary">Lưu</button>
@@ -355,26 +355,26 @@
 
     <!-- SCORES (hidden, accessible from Settings) -->
     <section id="page-scores" class="page">
-      <h2>📈 Band Score Tracker</h2>
+      <h2><i class="icon-trending-up"></i> Band Score Tracker</h2>
       <div class="card">
         <h3>Thêm điểm mới</h3>
         <div class="score-form">
           <input type="date" id="score-date">
           <div class="score-inputs">
             <div class="score-field">
-              <label>🎧 L</label>
+              <label>L</label>
               <input type="number" id="score-l" min="0" max="9" step="0.5" placeholder="0">
             </div>
             <div class="score-field">
-              <label>📖 R</label>
+              <label>R</label>
               <input type="number" id="score-r" min="0" max="9" step="0.5" placeholder="0">
             </div>
             <div class="score-field">
-              <label>✍️ W</label>
+              <label>W</label>
               <input type="number" id="score-w" min="0" max="9" step="0.5" placeholder="0">
             </div>
             <div class="score-field">
-              <label>🗣️ S</label>
+              <label>S</label>
               <input type="number" id="score-s" min="0" max="9" step="0.5" placeholder="0">
             </div>
           </div>
@@ -386,13 +386,16 @@
 
     <!-- SETTINGS -->
     <section id="page-settings" class="page">
-      <h2>⚙️ Settings</h2>
+      <h2><i class="icon-settings"></i> Settings</h2>
       <div class="card">
-        <h3>📊 Xem thêm</h3>
-        <button class="btn-secondary" onclick="navigateTo('scores')" style="width:100%">📈 Band Score Tracker</button>
+        <h3><i class="icon-compass"></i> Xem thêm</h3>
+        <button class="btn-secondary" onclick="navigateTo('scores')" style="width:100%"><i class="icon-trending-up"></i> Band Score Tracker</button>
+        <button class="btn-secondary" onclick="navigateTo('notes')" style="width:100%;margin-top:0.5rem"><i class="icon-notebook-pen"></i> Notes</button>
+        <button class="btn-secondary" onclick="navigateTo('timer')" style="width:100%;margin-top:0.5rem"><i class="icon-timer"></i> Timer</button>
+        <button class="btn-secondary" onclick="navigateTo('calendar')" style="width:100%;margin-top:0.5rem"><i class="icon-calendar-days"></i> Calendar</button>
       </div>
       <div class="card">
-        <h3>🔑 GitHub Sync</h3>
+        <h3><i class="icon-key-round"></i> GitHub Sync</h3>
         <p>Kết nối GitHub để đồng bộ dữ liệu giữa các thiết bị.<br>
         Tạo token: <a href="https://github.com/settings/tokens" target="_blank">GitHub → Personal Access Tokens</a> (scope: <strong>repo</strong>)</p>
         <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
@@ -400,17 +403,17 @@
         <input type="text" id="gh-branch" placeholder="branch" value="main">
         <input type="text" id="gh-path" placeholder="file path" value="data.json">
         <div class="form-actions">
-          <button id="gh-save" class="btn-primary">💾 Lưu</button>
-          <button id="gh-test" class="btn-secondary">🧪 Test</button>
+          <button id="gh-save" class="btn-primary"><i class="icon-save"></i> Lưu</button>
+          <button id="gh-test" class="btn-secondary"><i class="icon-flask-conical"></i> Test</button>
         </div>
         <div id="gh-status"></div>
       </div>
       <div class="card">
-        <h3>📦 Dữ liệu</h3>
+        <h3><i class="icon-database"></i> Dữ liệu</h3>
         <div class="form-actions" style="flex-wrap:wrap">
-          <button id="export-btn" class="btn-primary">📥 Export</button>
-          <button id="import-trigger" class="btn-secondary">📤 Import</button>
-          <button id="reset-btn" class="btn-hard">🗑️ Xoá hết</button>
+          <button id="export-btn" class="btn-primary"><i class="icon-download"></i> Export</button>
+          <button id="import-trigger" class="btn-secondary"><i class="icon-upload"></i> Import</button>
+          <button id="reset-btn" class="btn-hard"><i class="icon-trash-2"></i> Xoá hết</button>
         </div>
         <input type="file" id="import-file" accept=".json" style="display:none">
       </div>

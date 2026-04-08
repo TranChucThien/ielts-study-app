@@ -40,18 +40,18 @@ const github = {
     }
   },
   async pull() {
-    this.setStatus('🔄 Đang tải...', 'syncing');
+    this.setStatus('⟳ Đang tải...', 'syncing');
     try {
       const f = await this.apiRequest('GET');
-      if (!f) { this.setStatus('📄 Chưa có data', ''); return false; }
+      if (!f) { this.setStatus('Chưa có data', ''); return false; }
       store.setAll(JSON.parse(decodeURIComponent(escape(atob(f.content)))));
       localStorage.setItem('ielts-github-sha', f.sha);
-      this.setStatus('✅ Synced ' + new Date().toLocaleTimeString('vi-VN'), 'connected');
+      this.setStatus('● Synced ' + new Date().toLocaleTimeString('vi-VN'), 'connected');
       return true;
-    } catch (e) { this.setStatus('❌ ' + e.message, 'error'); return false; }
+    } catch (e) { this.setStatus('✖ ' + e.message, 'error'); return false; }
   },
   async push() {
-    this.setStatus('🔄 Đang lưu...', 'syncing');
+    this.setStatus('⟳ Đang lưu...', 'syncing');
     try {
       const content = btoa(unescape(encodeURIComponent(JSON.stringify(store.getAll(), null, 2))));
       let sha = localStorage.getItem('ielts-github-sha');
@@ -59,12 +59,12 @@ const github = {
       const cfg = this.getConfig();
       const r = await this.apiRequest('PUT', { message: `sync: ${new Date().toISOString()}`, content, sha, branch: cfg.branch });
       localStorage.setItem('ielts-github-sha', r.content.sha);
-      this.setStatus('✅ Saved ' + new Date().toLocaleTimeString('vi-VN'), 'connected');
+      this.setStatus('● Saved ' + new Date().toLocaleTimeString('vi-VN'), 'connected');
       return true;
-    } catch (e) { this.setStatus('❌ ' + e.message, 'error'); return false; }
+    } catch (e) { this.setStatus('✖ ' + e.message, 'error'); return false; }
   },
   async sync() {
-    if (!this.getConfig()?.token) { this.setStatus('⏸ Chưa kết nối', ''); return; }
+    if (!this.getConfig()?.token) { this.setStatus('○ Chưa kết nối', ''); return; }
     await this.pull(); refreshAll();
   },
   async autoSave() { if (this.getConfig()?.token) await this.push(); }
@@ -187,16 +187,16 @@ $$('#checklist input').forEach(cb => {
     if (!td) { td = { date: d, items: {} }; cl.push(td); }
     td.items[cb.dataset.check] = cb.checked;
     store.set('checklist', cl);
-    if (cb.checked) { recordStudy(); toast('✅ Đã ghi nhận!'); }
+    if (cb.checked) { recordStudy(); toast('Đã ghi nhận!'); }
     scheduleSync();
   });
 });
 
 $('#sync-btn').addEventListener('click', async () => {
-  const btn = $('#sync-btn'); btn.disabled = true; btn.textContent = '🔄...';
+  const btn = $('#sync-btn'); btn.disabled = true; btn.innerHTML = '<i class="lucide-refresh-cw"></i>...';
   await github.push(); await github.pull(); refreshAll();
-  btn.disabled = false; btn.textContent = '🔄 Sync';
-  toast('✅ Đồng bộ xong!');
+  btn.disabled = false; btn.innerHTML = '<i class="lucide-refresh-cw"></i> Sync';
+  toast('Đồng bộ xong!');
 });
 
 // ===== FLASHCARDS =====
@@ -224,7 +224,7 @@ $('#fc-save').addEventListener('click', () => {
   store.set('flashcards', cards);
   $('#fc-form').style.display = 'none';
   renderFcList(); refreshDashboard(); recordStudy(); scheduleSync();
-  toast('✅ Đã lưu flashcard!');
+  toast('Đã lưu flashcard!');
 });
 
 $('#fc-filter-deck').addEventListener('change', () => renderFcList());
@@ -239,8 +239,8 @@ function renderFcList() {
       <span class="fc-item-front">${esc(c.front)}</span>
       <span class="fc-item-back">${esc(c.back)}</span>
       <div class="fc-item-actions">
-        <button onclick="editFc('${c.id}')">✏️</button>
-        <button onclick="deleteFc('${c.id}')">🗑️</button>
+        <button onclick="editFc('${c.id}')"><i class="icon-pencil"></i></button>
+        <button onclick="deleteFc('${c.id}')"><i class="icon-trash-2"></i></button>
       </div>
     </div>`).join('');
 }
@@ -287,7 +287,7 @@ $('#fc-exit-study').addEventListener('click', exitStudy);
 
 function showStudyCard() {
   if (fcStudyIdx >= fcStudyCards.length) {
-    toast('🎉 Hoàn thành!');
+    toast('Hoàn thành!');
     exitStudy();
     return;
   }
@@ -354,14 +354,14 @@ $('#note-add').addEventListener('click', () => {
   store.set('notes', notes);
   $('#note-title').value = ''; $('#note-content').value = ''; $('#note-tag').value = '';
   renderNotes(); refreshDashboard(); recordStudy(); scheduleSync();
-  toast('✅ Đã lưu ghi chú!');
+  toast('Đã lưu ghi chú!');
 });
 
 $('#note-search').addEventListener('input', () => renderNotes());
 
 function renderNotes() {
   const filter = ($('#note-search').value || '').toLowerCase();
-  const tags = { tip: '💡 Tip', mistake: '❌ Lỗi', template: '📋 Template', vocab: '📚 Vocab', grammar: '📐 Grammar' };
+  const tags = { tip: 'Tip', mistake: 'Lỗi', template: 'Template', vocab: 'Vocab', grammar: 'Grammar' };
   const notes = store.get('notes')
     .filter(n => n.skill === currentSkill)
     .filter(n => !filter || (n.title + n.content).toLowerCase().includes(filter))
@@ -374,8 +374,8 @@ function renderNotes() {
       <div class="note-meta">
         <div>${n.tag ? `<span class="note-tag tag-${n.tag}">${tags[n.tag] || n.tag}</span> ` : ''}${new Date(n.date).toLocaleDateString('vi-VN')}</div>
         <div class="note-actions">
-          <button onclick="editNote('${n.id}')">✏️</button>
-          <button onclick="deleteNote('${n.id}')">🗑️</button>
+          <button onclick="editNote('${n.id}')"><i class="icon-pencil"></i></button>
+          <button onclick="deleteNote('${n.id}')"><i class="icon-trash-2"></i></button>
         </div>
       </div>
     </div>`).join('');
@@ -414,7 +414,7 @@ function startTimer(seconds, label) {
   updateRing();
   $('.timer-presets').style.display = 'none';
   $('#timer-display').style.display = 'block';
-  $('#timer-pause').textContent = '⏸ Tạm dừng';
+  $('#timer-pause').innerHTML = '<i class="icon-pause"></i> Tạm dừng';
   recordStudy();
 
   timerInterval = setInterval(() => {
@@ -424,8 +424,8 @@ function startTimer(seconds, label) {
     updateRing();
     if (timerSeconds <= 0) {
       clearInterval(timerInterval);
-      $('#timer-clock').textContent = '⏰ Hết giờ!';
-      toast('⏰ Hết giờ!');
+      $('#timer-clock').textContent = 'Hết giờ!';
+      toast('Hết giờ!');
       try { navigator.vibrate?.(500); } catch(e) {}
     }
   }, 1000);
@@ -440,7 +440,7 @@ function updateRing() {
 
 $('#timer-pause').addEventListener('click', () => {
   timerPaused = !timerPaused;
-  $('#timer-pause').textContent = timerPaused ? '▶ Tiếp tục' : '⏸ Tạm dừng';
+  $('#timer-pause').innerHTML = timerPaused ? '<i class="icon-play"></i> Tiếp tục' : '<i class="icon-pause"></i> Tạm dừng';
 });
 
 $('#timer-stop').addEventListener('click', () => {
@@ -554,8 +554,8 @@ function renderSessions(dateStr) {
     .filter(s => s.date === dateStr)
     .sort((a, b) => b.created - a.created);
 
-  const skillLabels = { listening: '🎧 L', reading: '📖 R', writing: '✍️ W', speaking: '🗣️ S', vocabulary: '📚 V' };
-  const moodLabels = { great: '🔥 Rất tốt', good: '😊 Tốt', ok: '😐 Bình thường', bad: '😣 Chưa tốt' };
+  const skillLabels = { listening: 'L', reading: 'R', writing: 'W', speaking: 'S', vocabulary: 'V' };
+  const moodLabels = { great: 'Rất tốt', good: 'Tốt', ok: 'Bình thường', bad: 'Chưa tốt' };
 
   if (!sessions.length) {
     $('#ses-list').innerHTML = '<div class="empty-state">Chưa có ghi chú buổi học</div>';
@@ -572,8 +572,8 @@ function renderSessions(dateStr) {
           ${s.mood ? `<span class="ses-mood">${moodLabels[s.mood] || s.mood}</span>` : ''}
         </div>
         <div class="ses-entry-actions">
-          <button onclick="editSession('${s.id}')">✏️</button>
-          <button onclick="deleteSession('${s.id}')">🗑️</button>
+          <button onclick="editSession('${s.id}')"><i class="icon-pencil"></i></button>
+          <button onclick="deleteSession('${s.id}')"><i class="icon-trash-2"></i></button>
         </div>
       </div>
     </div>`).join('');
@@ -635,7 +635,7 @@ $('#ses-add').addEventListener('click', () => {
   renderCalendar();
   recordStudy();
   scheduleSync();
-  toast('✅ Đã lưu buổi học!');
+  toast('Đã lưu buổi học!');
 });
 
 window.editSession = id => {
@@ -723,7 +723,7 @@ document.getElementById('voc-save').addEventListener('click', function() {
   store.set('vocabulary', vocab);
   document.getElementById('voc-form').style.display = 'none';
   renderVocab(); renderFcList(); refreshDashboard(); recordStudy(); scheduleSync();
-  toast('✅ Đã lưu từ vựng!');
+  toast('Đã lưu từ vựng!');
 });
 
 $('#voc-filter-topic').addEventListener('change', () => renderVocab());
@@ -732,7 +732,7 @@ $('#voc-search').addEventListener('input', () => renderVocab());
 function renderVocab() {
   const topic = $('#voc-filter-topic').value;
   const filter = ($('#voc-search').value || '').toLowerCase();
-  const topicLabels = { environment: '🌍 Environment', education: '🎓 Education', technology: '💻 Technology', health: '🏥 Health', society: '👥 Society', work: '💼 Work', other: '📌 Other' };
+  const topicLabels = { environment: 'Environment', education: 'Education', technology: 'Technology', health: 'Health', society: 'Society', work: 'Work', other: 'Other' };
   const vocab = store.get('vocabulary')
     .filter(v => topic === 'all' || v.topic === topic)
     .filter(v => !filter || (v.word + v.meaning).toLowerCase().includes(filter))
@@ -758,8 +758,8 @@ function renderVocab() {
       <div class="voc-meta">
         <span class="voc-topic-tag">${topicLabels[v.topic] || v.topic}</span>
         <div class="voc-actions">
-          <button onclick="editVoc('${v.id}')">✏️</button>
-          <button onclick="deleteVoc('${v.id}')">🗑️</button>
+          <button onclick="editVoc('${v.id}')"><i class="icon-pencil"></i></button>
+          <button onclick="deleteVoc('${v.id}')"><i class="icon-trash-2"></i></button>
         </div>
       </div>
     </div>`).join('');
@@ -826,7 +826,7 @@ $('#voc-sample-btn').addEventListener('click', () => {
   store.set('vocabulary', vocab);
   store.set('flashcards', cards);
   renderVocab(); renderFcList(); refreshDashboard(); scheduleSync();
-  toast(`📦 Đã thêm ${added} từ mẫu!`);
+  toast(`Đã thêm ${added} từ mẫu!`);
 });
 
 // ===== SCORES =====
@@ -841,7 +841,7 @@ $('#score-add').addEventListener('click', () => {
   store.set('scores', scores);
   $('#score-l').value = ''; $('#score-r').value = ''; $('#score-w').value = ''; $('#score-s').value = '';
   renderScores(); recordStudy(); scheduleSync();
-  toast('✅ Đã lưu điểm!');
+  toast('Đã lưu điểm!');
 });
 
 function renderScores() {
@@ -854,12 +854,12 @@ function renderScores() {
         <span class="score-entry-overall">Overall: ${s.overall}</span>
       </div>
       <div class="score-entry-skills">
-        <div><div class="score-skill-label">🎧 L</div><div class="score-skill-value">${s.l}</div></div>
-        <div><div class="score-skill-label">📖 R</div><div class="score-skill-value">${s.r}</div></div>
-        <div><div class="score-skill-label">✍️ W</div><div class="score-skill-value">${s.w}</div></div>
-        <div><div class="score-skill-label">🗣️ S</div><div class="score-skill-value">${s.s}</div></div>
+        <div><div class="score-skill-label">L</div><div class="score-skill-value">${s.l}</div></div>
+        <div><div class="score-skill-label">R</div><div class="score-skill-value">${s.r}</div></div>
+        <div><div class="score-skill-label">W</div><div class="score-skill-value">${s.w}</div></div>
+        <div><div class="score-skill-label">S</div><div class="score-skill-value">${s.s}</div></div>
       </div>
-      <div class="score-entry-actions"><button onclick="deleteScore('${s.id}')">🗑️</button></div>
+      <div class="score-entry-actions"><button onclick="deleteScore('${s.id}')"><i class="icon-trash-2"></i></button></div>
     </div>`).join('');
 }
 
@@ -884,23 +884,23 @@ $('#gh-save').addEventListener('click', () => {
   const cfg = { token: $('#gh-token').value.trim(), repo: $('#gh-repo').value.trim(), branch: $('#gh-branch').value.trim() || 'main', path: $('#gh-path').value.trim() || 'data.json' };
   if (!cfg.token || !cfg.repo) return showGhStatus('Cần Token và Repo!', 'error');
   github.saveConfig(cfg);
-  showGhStatus('✅ Đã lưu!', 'success');
-  github.setStatus('✅ Đã kết nối', 'connected');
-  toast('✅ Đã lưu cấu hình GitHub!');
+  showGhStatus('● Đã lưu!', 'success');
+  github.setStatus('● Đã kết nối', 'connected');
+  toast('Đã lưu cấu hình GitHub!');
 });
 
 $('#gh-test').addEventListener('click', async () => {
   const cfg = { token: $('#gh-token').value.trim(), repo: $('#gh-repo').value.trim(), branch: $('#gh-branch').value.trim() || 'main', path: $('#gh-path').value.trim() || 'data.json' };
   if (!cfg.token || !cfg.repo) return showGhStatus('Cần Token và Repo!', 'error');
   github.saveConfig(cfg);
-  showGhStatus('🔄 Testing...', 'success');
+  showGhStatus('⟳ Testing...', 'success');
   try {
     const r = await fetch(`https://api.github.com/repos/${cfg.repo}`, { headers: { 'Authorization': `token ${cfg.token}` } });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const repo = await r.json();
-    showGhStatus(`✅ OK! Repo: ${repo.full_name}`, 'success');
-    github.setStatus('✅ Đã kết nối', 'connected');
-  } catch (e) { showGhStatus('❌ ' + e.message, 'error'); }
+    showGhStatus(`● OK! Repo: ${repo.full_name}`, 'success');
+    github.setStatus('● Đã kết nối', 'connected');
+  } catch (e) { showGhStatus('✖ ' + e.message, 'error'); }
 });
 
 function showGhStatus(msg, type) {
@@ -912,7 +912,7 @@ $('#export-btn').addEventListener('click', () => {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify(store.getAll(), null, 2)], { type: 'application/json' }));
   a.download = `ielts-backup-${today()}.json`; a.click();
-  toast('📥 Đã export!');
+  toast('Đã export!');
 });
 
 $('#import-trigger').addEventListener('click', () => $('#import-file').click());
@@ -922,8 +922,8 @@ $('#import-file').addEventListener('change', () => {
   if (!confirm('Ghi đè dữ liệu hiện tại?')) return;
   const reader = new FileReader();
   reader.onload = e => {
-    try { store.setAll(JSON.parse(e.target.result)); refreshAll(); scheduleSync(); toast('✅ Import OK!'); }
-    catch { toast('❌ File không hợp lệ!'); }
+    try { store.setAll(JSON.parse(e.target.result)); refreshAll(); scheduleSync(); toast('Import OK!'); }
+    catch { toast('File không hợp lệ!'); }
   };
   reader.readAsText(file);
 });
@@ -931,7 +931,7 @@ $('#import-file').addEventListener('change', () => {
 $('#reset-btn').addEventListener('click', () => {
   if (!confirm('XOÁ HẾT dữ liệu?')) return;
   DATA_KEYS.forEach(k => localStorage.removeItem('ielts-' + k));
-  refreshAll(); scheduleSync(); toast('🗑️ Đã xoá!');
+  refreshAll(); scheduleSync(); toast('Đã xoá!');
 });
 
 // ===== INIT =====
