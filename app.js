@@ -1132,7 +1132,7 @@ function seedSampleData() {
     { date: d(1), items: { vocab: true, listen: true, read: true, write: true, speak: false } },
   ];
 
-  const settings = { targetBand: '6.5' };
+  const settings = { targetBand: '5.0' };
 
   store.setAll({ vocabulary: vocab, flashcards: cards, notes, scores, sessions, streak, history, checklist, settings });
   toast('Chào mừng! Dữ liệu mẫu đã được tải.');
