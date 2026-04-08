@@ -215,7 +215,7 @@ main {
   gap: 0.7rem;
   border: none;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .grad-cyan { background: linear-gradient(135deg, rgba(6,182,212,0.25), rgba(8,145,178,0.15)); }
@@ -242,7 +242,65 @@ main {
   border-radius: 6px;
   font-size: 1.1rem;
   font-weight: 700;
+  font-family: inherit;
+  width: auto;
+  margin: 0;
 }
+
+/* Custom Select (Dark Dropdown) */
+.custom-select { position: relative; }
+.custom-select-trigger {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text);
+  padding: 0.3rem 1.6rem 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  display: inline-block;
+}
+.custom-select-trigger::after {
+  content: '';
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid rgba(255,255,255,0.5);
+}
+.custom-select-trigger:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.2); }
+.custom-select-options {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 0.3rem;
+  z-index: 50;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  min-width: 60px;
+}
+.custom-select-options.open { display: block; animation: fadeIn 0.15s ease; }
+.custom-select-option {
+  padding: 0.45rem 0.7rem;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.1s;
+}
+.custom-select-option:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.custom-select-option.active { background: var(--accent); color: #fff; }
 
 /* Word of the day */
 .wotd-card {
@@ -253,7 +311,8 @@ main {
 }
 
 .wotd-label { font-size: 0.7rem; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem; }
-.wotd-word { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.3rem; }
+.wotd-word { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.15rem; }
+.wotd-phonetic { font-size: 0.85rem; color: var(--text2); font-style: italic; margin-bottom: 0.3rem; }
 .wotd-meaning { color: var(--green); font-size: 0.95rem; margin-bottom: 0.3rem; }
 .wotd-example { color: var(--text2); font-size: 0.8rem; font-style: italic; margin-bottom: 0.6rem; }
 .wotd-refresh {

@@ -119,12 +119,23 @@ function showQuote() {
 
 // ===== WORD OF THE DAY =====
 window.pickWotd = function() {
-  const cards = store.get('flashcards');
-  if (!cards.length) { $('#wotd-card').style.display = 'none'; return; }
-  const c = cards[Math.floor(Math.random() * cards.length)];
-  $('#wotd-word').textContent = c.front;
-  $('#wotd-meaning').textContent = c.back;
-  $('#wotd-example').textContent = c.example || '';
+  const vocab = store.get('vocabulary');
+  if (!vocab.length) {
+    const cards = store.get('flashcards');
+    if (!cards.length) { $('#wotd-card').style.display = 'none'; return; }
+    const c = cards[Math.floor(Math.random() * cards.length)];
+    $('#wotd-word').textContent = c.front;
+    $('#wotd-phonetic').textContent = '';
+    $('#wotd-meaning').textContent = c.back;
+    $('#wotd-example').textContent = c.example || '';
+    $('#wotd-card').style.display = 'block';
+    return;
+  }
+  const v = vocab[Math.floor(Math.random() * vocab.length)];
+  $('#wotd-word').textContent = v.word;
+  $('#wotd-phonetic').textContent = v.phonetic || '';
+  $('#wotd-meaning').textContent = v.meaning;
+  $('#wotd-example').textContent = v.example || '';
   $('#wotd-card').style.display = 'block';
 };
 
@@ -151,7 +162,7 @@ function refreshDashboard() {
   $('#fc-count').textContent = store.get('flashcards').length;
   $('#vocab-count').textContent = store.get('vocabulary').length;
   updateStatProgress();
-  $('#target-band').value = settings.targetBand;
+  $('#target-band-trigger').textContent = settings.targetBand;
   renderHeatmap();
   loadChecklist();
   showQuote();
@@ -159,9 +170,23 @@ function refreshDashboard() {
   initQuickFc();
 }
 
-$('#target-band').addEventListener('change', e => {
-  const s = store.get('settings'); s.targetBand = e.target.value; store.set('settings', s); scheduleSync();
+$('#target-band-trigger').addEventListener('click', e => {
+  e.stopPropagation();
+  $('#target-band-options').classList.toggle('open');
 });
+
+$$('#target-band-options .custom-select-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const val = opt.dataset.value;
+    $('#target-band-trigger').textContent = val;
+    $$('#target-band-options .custom-select-option').forEach(o => o.classList.remove('active'));
+    opt.classList.add('active');
+    $('#target-band-options').classList.remove('open');
+    const s = store.get('settings'); s.targetBand = val; store.set('settings', s); scheduleSync();
+  });
+});
+
+document.addEventListener('click', () => $('#target-band-options').classList.remove('open'));
 
 function updateStatProgress() {
   const cards = store.get('flashcards');
