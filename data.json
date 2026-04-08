@@ -9,7 +9,33 @@
       "date": 1775618330407
     }
   ],
-  "flashcards": [],
+  "flashcards": [
+    { "id": "fc01", "front": "deteriorate", "back": "xuống cấp, xấu đi", "example": "Air quality has deteriorated significantly.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc02", "front": "sustainable", "back": "bền vững", "example": "We need sustainable energy sources.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc03", "front": "curriculum", "back": "chương trình giảng dạy", "example": "The school updated its curriculum.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc04", "front": "innovative", "back": "sáng tạo, đổi mới", "example": "Innovative teaching methods improve learning.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc05", "front": "ubiquitous", "back": "có mặt khắp nơi", "example": "Smartphones have become ubiquitous.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc06", "front": "exacerbate", "back": "làm trầm trọng thêm", "example": "Pollution exacerbates health problems.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc07", "front": "phenomenon", "back": "hiện tượng", "example": "Global warming is a well-documented phenomenon.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc08", "front": "predominantly", "back": "chủ yếu, phần lớn", "example": "The workforce is predominantly young.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc09", "front": "fluctuate", "back": "dao động, biến đổi", "example": "Prices fluctuate throughout the year.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc10", "front": "infrastructure", "back": "cơ sở hạ tầng", "example": "The government invested in infrastructure.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc11", "front": "autonomous", "back": "tự chủ, tự trị", "example": "Autonomous vehicles are being tested.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc12", "front": "alleviate", "back": "giảm bớt, xoa dịu", "example": "Medicine can alleviate pain.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc13", "front": "compelling", "back": "thuyết phục, hấp dẫn", "example": "She made a compelling argument.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc14", "front": "disparity", "back": "sự chênh lệch", "example": "Income disparity is a growing concern.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc15", "front": "proficiency", "back": "sự thành thạo", "example": "Language proficiency is essential.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc16", "front": "mitigate", "back": "giảm thiểu", "example": "Trees help mitigate climate change.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc17", "front": "unprecedented", "back": "chưa từng có tiền lệ", "example": "The pandemic caused unprecedented disruption.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc18", "front": "sedentary", "back": "ít vận động", "example": "A sedentary lifestyle leads to health issues.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc19", "front": "versatile", "back": "đa năng, linh hoạt", "example": "She is a versatile employee.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc20", "front": "proliferation", "back": "sự gia tăng nhanh", "example": "The proliferation of social media changed communication.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc21", "front": "detrimental", "back": "có hại", "example": "Smoking is detrimental to health.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc22", "front": "incentive", "back": "động lực, ưu đãi", "example": "Tax incentives encourage investment.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc23", "front": "eradicate", "back": "xóa bỏ, loại trừ", "example": "Efforts to eradicate poverty continue.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc24", "front": "cognitive", "back": "thuộc nhận thức", "example": "Reading improves cognitive abilities.", "deck": "general", "score": 0, "lastReview": null },
+    { "id": "fc25", "front": "biodiversity", "back": "đa dạng sinh học", "example": "Deforestation threatens biodiversity.", "deck": "general", "score": 0, "lastReview": null }
+  ],
   "streak": {
     "count": 1,
     "lastDate": "2026-04-08"
@@ -50,5 +76,32 @@
       "created": 1775628543875
     }
   ],
-  "sessions": []
+  "sessions": [],
+  "vocabulary": [
+    { "id": "v01", "word": "deteriorate", "type": "v", "meaning": "xuống cấp, xấu đi", "phonetic": "/dɪˈtɪəriəreɪt/", "example": "Air quality has deteriorated significantly.", "synonyms": ["decline", "worsen"], "topic": "environment", "created": 1775600000000 },
+    { "id": "v02", "word": "sustainable", "type": "adj", "meaning": "bền vững", "phonetic": "/səˈsteɪnəbl/", "example": "We need sustainable energy sources.", "synonyms": ["viable", "long-term"], "topic": "environment", "created": 1775600000001 },
+    { "id": "v03", "word": "curriculum", "type": "n", "meaning": "chương trình giảng dạy", "phonetic": "/kəˈrɪkjʊləm/", "example": "The school updated its curriculum.", "synonyms": ["syllabus", "program"], "topic": "education", "created": 1775600000002 },
+    { "id": "v04", "word": "innovative", "type": "adj", "meaning": "sáng tạo, đổi mới", "phonetic": "/ˈɪnəveɪtɪv/", "example": "Innovative teaching methods improve learning.", "synonyms": ["creative", "groundbreaking"], "topic": "education", "created": 1775600000003 },
+    { "id": "v05", "word": "ubiquitous", "type": "adj", "meaning": "có mặt khắp nơi", "phonetic": "/juːˈbɪkwɪtəs/", "example": "Smartphones have become ubiquitous.", "synonyms": ["omnipresent", "widespread"], "topic": "technology", "created": 1775600000004 },
+    { "id": "v06", "word": "exacerbate", "type": "v", "meaning": "làm trầm trọng thêm", "phonetic": "/ɪɡˈzæsərbeɪt/", "example": "Pollution exacerbates health problems.", "synonyms": ["aggravate", "worsen"], "topic": "health", "created": 1775600000005 },
+    { "id": "v07", "word": "phenomenon", "type": "n", "meaning": "hiện tượng", "phonetic": "/fəˈnɒmɪnən/", "example": "Global warming is a well-documented phenomenon.", "synonyms": ["occurrence", "event"], "topic": "environment", "created": 1775600000006 },
+    { "id": "v08", "word": "predominantly", "type": "adv", "meaning": "chủ yếu, phần lớn", "phonetic": "/prɪˈdɒmɪnəntli/", "example": "The workforce is predominantly young.", "synonyms": ["mainly", "mostly"], "topic": "society", "created": 1775600000007 },
+    { "id": "v09", "word": "fluctuate", "type": "v", "meaning": "dao động, biến đổi", "phonetic": "/ˈflʌktʃueɪt/", "example": "Prices fluctuate throughout the year.", "synonyms": ["vary", "oscillate"], "topic": "work", "created": 1775600000008 },
+    { "id": "v10", "word": "infrastructure", "type": "n", "meaning": "cơ sở hạ tầng", "phonetic": "/ˈɪnfrəstrʌktʃər/", "example": "The government invested in infrastructure.", "synonyms": ["framework", "foundation"], "topic": "society", "created": 1775600000009 },
+    { "id": "v11", "word": "autonomous", "type": "adj", "meaning": "tự chủ, tự trị", "phonetic": "/ɔːˈtɒnəməs/", "example": "Autonomous vehicles are being tested.", "synonyms": ["independent", "self-governing"], "topic": "technology", "created": 1775600000010 },
+    { "id": "v12", "word": "alleviate", "type": "v", "meaning": "giảm bớt, xoa dịu", "phonetic": "/əˈliːvieɪt/", "example": "Medicine can alleviate pain.", "synonyms": ["relieve", "ease"], "topic": "health", "created": 1775600000011 },
+    { "id": "v13", "word": "compelling", "type": "adj", "meaning": "thuyết phục, hấp dẫn", "phonetic": "/kəmˈpelɪŋ/", "example": "She made a compelling argument.", "synonyms": ["convincing", "persuasive"], "topic": "other", "created": 1775600000012 },
+    { "id": "v14", "word": "disparity", "type": "n", "meaning": "sự chênh lệch", "phonetic": "/dɪˈspærəti/", "example": "Income disparity is a growing concern.", "synonyms": ["inequality", "gap"], "topic": "society", "created": 1775600000013 },
+    { "id": "v15", "word": "proficiency", "type": "n", "meaning": "sự thành thạo", "phonetic": "/prəˈfɪʃənsi/", "example": "Language proficiency is essential.", "synonyms": ["competence", "expertise"], "topic": "education", "created": 1775600000014 },
+    { "id": "v16", "word": "mitigate", "type": "v", "meaning": "giảm thiểu", "phonetic": "/ˈmɪtɪɡeɪt/", "example": "Trees help mitigate climate change.", "synonyms": ["reduce", "lessen"], "topic": "environment", "created": 1775600000015 },
+    { "id": "v17", "word": "unprecedented", "type": "adj", "meaning": "chưa từng có tiền lệ", "phonetic": "/ʌnˈpresɪdentɪd/", "example": "The pandemic caused unprecedented disruption.", "synonyms": ["unparalleled", "unheard-of"], "topic": "society", "created": 1775600000016 },
+    { "id": "v18", "word": "sedentary", "type": "adj", "meaning": "ít vận động", "phonetic": "/ˈsedəntri/", "example": "A sedentary lifestyle leads to health issues.", "synonyms": ["inactive", "stationary"], "topic": "health", "created": 1775600000017 },
+    { "id": "v19", "word": "versatile", "type": "adj", "meaning": "đa năng, linh hoạt", "phonetic": "/ˈvɜːsətaɪl/", "example": "She is a versatile employee.", "synonyms": ["adaptable", "flexible"], "topic": "work", "created": 1775600000018 },
+    { "id": "v20", "word": "proliferation", "type": "n", "meaning": "sự gia tăng nhanh", "phonetic": "/prəˌlɪfəˈreɪʃən/", "example": "The proliferation of social media changed communication.", "synonyms": ["spread", "expansion"], "topic": "technology", "created": 1775600000019 },
+    { "id": "v21", "word": "detrimental", "type": "adj", "meaning": "có hại", "phonetic": "/ˌdetrɪˈmentl/", "example": "Smoking is detrimental to health.", "synonyms": ["harmful", "damaging"], "topic": "health", "created": 1775600000020 },
+    { "id": "v22", "word": "incentive", "type": "n", "meaning": "động lực, ưu đãi", "phonetic": "/ɪnˈsentɪv/", "example": "Tax incentives encourage investment.", "synonyms": ["motivation", "stimulus"], "topic": "work", "created": 1775600000021 },
+    { "id": "v23", "word": "eradicate", "type": "v", "meaning": "xóa bỏ, loại trừ", "phonetic": "/ɪˈrædɪkeɪt/", "example": "Efforts to eradicate poverty continue.", "synonyms": ["eliminate", "abolish"], "topic": "society", "created": 1775600000022 },
+    { "id": "v24", "word": "cognitive", "type": "adj", "meaning": "thuộc nhận thức", "phonetic": "/ˈkɒɡnətɪv/", "example": "Reading improves cognitive abilities.", "synonyms": ["mental", "intellectual"], "topic": "education", "created": 1775600000023 },
+    { "id": "v25", "word": "biodiversity", "type": "n", "meaning": "đa dạng sinh học", "phonetic": "/ˌbaɪəʊdaɪˈvɜːsəti/", "example": "Deforestation threatens biodiversity.", "synonyms": ["ecological variety"], "topic": "environment", "created": 1775600000024 }
+  ]
 }
