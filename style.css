@@ -480,6 +480,7 @@ textarea { resize: vertical; min-height: 80px; }
 }
 
 .fc-hint { color: var(--text2); font-size: 0.7rem; margin-top: 1rem; font-weight: 400; }
+.fc-phonetic { color: var(--text2); font-size: 0.85rem; font-style: italic; font-weight: 400; margin-top: 0.3rem; }
 
 .fc-back {
   background: linear-gradient(135deg, #1a3a2a, #1a2540);
@@ -544,6 +545,7 @@ textarea { resize: vertical; min-height: 80px; }
 
 .fc-item:hover { border-color: var(--accent); }
 .fc-item-front { font-weight: 600; flex: 1; }
+.fc-item-phonetic { display: block; font-size: 0.75rem; color: var(--text2); font-weight: 400; font-style: italic; }
 .fc-item-back { color: var(--text2); flex: 1; }
 
 .fc-item-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
@@ -1128,6 +1130,7 @@ textarea { resize: vertical; min-height: 80px; }
   #timer-clock { font-size: 2.4rem; }
 
   .score-inputs { grid-template-columns: repeat(4, 1fr); gap: 0.3rem; }
+  .score-form input[type="date"] { margin-bottom: 0.3rem; }
 
   .card { padding: 1rem; }
   .tabs { gap: 0.25rem; }

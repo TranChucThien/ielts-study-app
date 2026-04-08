@@ -315,15 +315,20 @@ function renderFcList() {
   const cards = store.get('flashcards').filter(c => deck === 'all' || c.deck === deck);
   $('#fc-progress').textContent = `${cards.length} thẻ`;
   if (!cards.length) { $('#fc-list').innerHTML = '<div class="empty-state"><i class="icon-layers"></i>Chưa có flashcard nào<br><button class="btn-primary" onclick="$(\x27#fc-add-btn\x27).click()">+ Thêm flashcard</button></div>'; return; }
-  $('#fc-list').innerHTML = cards.map(c => `
+  const vocabMap = {};
+  store.get('vocabulary').forEach(v => { vocabMap[v.word.toLowerCase()] = v.phonetic || ''; });
+  $('#fc-list').innerHTML = cards.map(c => {
+    const ph = vocabMap[c.front.toLowerCase()] || '';
+    return `
     <div class="fc-item">
-      <span class="fc-item-front">${esc(c.front)}</span>
+      <div class="fc-item-front">${esc(c.front)}${ph ? `<span class="fc-item-phonetic">${esc(ph)}</span>` : ''}</div>
       <span class="fc-item-back">${esc(c.back)}</span>
       <div class="fc-item-actions">
         <button onclick="editFc('${c.id}')"><i class="icon-pencil"></i></button>
         <button onclick="deleteFc('${c.id}')"><i class="icon-trash-2"></i></button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 window.editFc = id => {
@@ -371,6 +376,11 @@ $('#fc-next-card').addEventListener('click', () => {
   showStudyCard();
 });
 
+function getPhonetic(word) {
+  const v = store.get('vocabulary').find(v => v.word.toLowerCase() === word.toLowerCase());
+  return v?.phonetic || '';
+}
+
 function showStudyCard() {
   if (fcStudyIdx >= fcStudyCards.length) {
     toast('Hoàn thành!');
@@ -380,6 +390,7 @@ function showStudyCard() {
   const c = fcStudyCards[fcStudyIdx];
   $('#fc-card').classList.remove('flipped');
   $('#fc-front-text').textContent = c.front;
+  $('#fc-phonetic-text').textContent = getPhonetic(c.front);
   $('#fc-back-text').textContent = c.back;
   $('#fc-example-text').textContent = c.example || '';
   $('#fc-study-progress').textContent = `${fcStudyIdx + 1} / ${fcStudyCards.length}`;
