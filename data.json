@@ -28,6 +28,17 @@
   "settings": {
     "targetBand": "5.0"
   },
-  "scores": [],
+  "scores": [
+    {
+      "id": "f6edd438-463b-42d7-8a05-aca098402958",
+      "date": "2026-04-08",
+      "l": 1,
+      "r": 1,
+      "w": 1,
+      "s": 0,
+      "overall": 1,
+      "created": 1775628538877
+    }
+  ],
   "sessions": []
 }
