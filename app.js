@@ -155,6 +155,7 @@ function refreshDashboard() {
   loadChecklist();
   showQuote();
   pickWotd();
+  initQuickFc();
 }
 
 $('#target-band').addEventListener('change', e => {
@@ -198,6 +199,46 @@ $('#sync-btn').addEventListener('click', async () => {
   btn.disabled = false; btn.innerHTML = '<i class="lucide-refresh-cw"></i> Sync';
   toast('Đồng bộ xong!');
 });
+
+// ===== QUICK FLASHCARD (Dashboard) =====
+let quickFcCards = [], quickFcIdx = 0, quickFcFlipped = false;
+
+function initQuickFc() {
+  quickFcCards = [...store.get('flashcards')].sort((a, b) => (a.score || 0) - (b.score || 0));
+  quickFcIdx = 0;
+  quickFcFlipped = false;
+  if (!quickFcCards.length) { $('#quick-fc-card').style.display = 'none'; return; }
+  $('#quick-fc-card').style.display = 'block';
+  showQuickFc();
+}
+
+function showQuickFc() {
+  if (quickFcIdx >= quickFcCards.length) quickFcIdx = 0;
+  const c = quickFcCards[quickFcIdx];
+  quickFcFlipped = false;
+  $('#quick-fc-front').textContent = c.front;
+  $('#quick-fc-back').style.display = 'none';
+  $('#quick-fc-example').style.display = 'none';
+  $('#quick-fc-hint').style.display = '';
+  $('#quick-fc-progress').textContent = `${quickFcIdx + 1} / ${quickFcCards.length}`;
+}
+
+window.toggleQuickFc = () => {
+  quickFcFlipped = !quickFcFlipped;
+  const c = quickFcCards[quickFcIdx];
+  $('#quick-fc-back').textContent = c.back;
+  $('#quick-fc-example').textContent = c.example || '';
+  $('#quick-fc-back').style.display = quickFcFlipped ? '' : 'none';
+  $('#quick-fc-example').style.display = quickFcFlipped && c.example ? '' : 'none';
+  $('#quick-fc-hint').style.display = quickFcFlipped ? 'none' : '';
+};
+
+
+window.skipQuickFc = () => {
+  quickFcIdx++;
+  if (quickFcIdx >= quickFcCards.length) quickFcIdx = 0;
+  showQuickFc();
+};
 
 // ===== FLASHCARDS =====
 let fcEditId = null, fcStudyIdx = 0, fcStudyCards = [];
@@ -284,6 +325,11 @@ function exitStudy() {
 }
 
 $('#fc-exit-study').addEventListener('click', exitStudy);
+
+$('#fc-next-card').addEventListener('click', () => {
+  fcStudyIdx++;
+  showStudyCard();
+});
 
 function showStudyCard() {
   if (fcStudyIdx >= fcStudyCards.length) {

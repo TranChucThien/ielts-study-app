@@ -95,6 +95,21 @@
         <button class="wotd-refresh" onclick="pickWotd()"><i class="icon-shuffle"></i> Từ khác</button>
       </div>
 
+      <!-- Quick Flashcard -->
+      <div class="card quick-fc-card" id="quick-fc-card" style="display:none">
+        <div class="quick-fc-header">
+          <span class="wotd-label"><i class="icon-layers"></i> Ôn flashcard</span>
+          <span class="quick-fc-progress" id="quick-fc-progress"></span>
+        </div>
+        <div id="quick-fc-body" class="quick-fc-body" onclick="toggleQuickFc()">
+          <div class="quick-fc-front" id="quick-fc-front"></div>
+          <div class="quick-fc-back" id="quick-fc-back" style="display:none"></div>
+          <div class="quick-fc-example" id="quick-fc-example" style="display:none"></div>
+          <small class="fc-hint" id="quick-fc-hint">Chạm để lật</small>
+        </div>
+        <button class="wotd-refresh" onclick="skipQuickFc()"><i class="icon-skip-forward"></i> Thẻ tiếp</button>
+      </div>
+
       <div class="card">
         <h3><i class="icon-calendar-days"></i> 90 ngày gần nhất</h3>
         <div id="heatmap"></div>
@@ -157,12 +172,9 @@
             </div>
           </div>
         </div>
-        <div class="fc-study-actions">
-          <button onclick="rateCard('hard')" class="btn-rate btn-hard"><i class="icon-thumbs-down"></i><span>Khó</span></button>
-          <button onclick="rateCard('ok')" class="btn-rate btn-ok"><i class="icon-minus"></i><span>Tạm</span></button>
-          <button onclick="rateCard('easy')" class="btn-rate btn-easy"><i class="icon-thumbs-up"></i><span>Dễ</span></button>
-        </div>
+
         <div id="fc-study-progress"></div>
+        <button id="fc-next-card" class="btn-primary" style="width:100%"><i class="icon-skip-forward"></i> Thẻ tiếp</button>
         <button id="fc-exit-study" class="btn-secondary" style="margin-top:0.5rem;width:100%">✕ Thoát</button>
       </div>
       <div id="fc-list"></div>
