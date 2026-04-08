@@ -371,6 +371,10 @@ function exitStudy() {
 
 $('#fc-exit-study').addEventListener('click', exitStudy);
 
+$('#fc-prev-card').addEventListener('click', () => {
+  if (fcStudyIdx > 0) { fcStudyIdx--; showStudyCard(); }
+});
+
 $('#fc-next-card').addEventListener('click', () => {
   fcStudyIdx++;
   showStudyCard();
@@ -394,6 +398,7 @@ function showStudyCard() {
   $('#fc-back-text').textContent = c.back;
   $('#fc-example-text').textContent = c.example || '';
   $('#fc-study-progress').textContent = `${fcStudyIdx + 1} / ${fcStudyCards.length}`;
+  $('#fc-prev-card').disabled = fcStudyIdx === 0;
 }
 
 // Flip: tap or click
@@ -1083,6 +1088,216 @@ $('#reset-btn').addEventListener('click', () => {
   refreshAll(); scheduleSync(); toast('Đã xoá!');
 });
 
+// ===== DICTATION =====
+let dictMode = 'word', dictRate = 1, dictCount = 10, dictTopic = 'all';
+let dictItems = [], dictIdx = 0, dictCorrect = 0, dictWrong = 0, dictResults = [], dictAnswered = false;
+
+$$('.dict-mode-btn').forEach(b => b.addEventListener('click', () => {
+  $$('.dict-mode-btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  dictMode = b.dataset.mode;
+}));
+
+$$('.dict-speed-btn').forEach(b => b.addEventListener('click', () => {
+  $$('.dict-speed-btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  dictRate = +b.dataset.rate;
+}));
+
+$$('.dict-count-btn').forEach(b => b.addEventListener('click', () => {
+  $$('.dict-count-btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  dictCount = +b.dataset.count;
+}));
+
+$$('.dict-topic-btn').forEach(b => b.addEventListener('click', () => {
+  $$('.dict-topic-btn').forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  dictTopic = b.dataset.topic;
+}));
+
+function getDictItems() {
+  let vocab = store.get('vocabulary');
+  const cards = store.get('flashcards');
+  if (dictTopic !== 'all') vocab = vocab.filter(v => v.topic === dictTopic);
+  let pool = [];
+  if (dictMode === 'word') {
+    pool = vocab.map(v => v.word);
+    if (!pool.length) pool = cards.map(c => c.front);
+  } else {
+    pool = vocab.filter(v => v.example).map(v => v.example);
+    if (!pool.length) pool = cards.filter(c => c.example).map(c => c.example);
+  }
+  pool = [...new Set(pool)].filter(Boolean);
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+  return dictCount > 0 ? pool.slice(0, dictCount) : pool;
+}
+
+function dictSpeak(text) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = dictRate; u.volume = 1; u.pitch = 1;
+  const voices = speechSynthesis.getVoices().filter(v => v.lang.startsWith('en'));
+  const preferred = voices.find(v => /google|samantha|daniel|karen/i.test(v.name)) || voices[0];
+  if (preferred) u.voice = preferred;
+  $('#dict-play-btn').classList.add('playing');
+  u.onend = () => $('#dict-play-btn').classList.remove('playing');
+  speechSynthesis.speak(u);
+}
+
+$('#dict-start').addEventListener('click', () => {
+  dictItems = getDictItems();
+  if (!dictItems.length) return toast(dictMode === 'word' ? 'Thêm từ vựng trước!' : 'Cần từ vựng có ví dụ!');
+  dictIdx = 0; dictCorrect = 0; dictWrong = 0; dictResults = [];
+  $('#dict-setup').style.display = 'none';
+  $('#dict-play').style.display = 'block';
+  $('#dict-result').style.display = 'none';
+  showDictItem();
+});
+
+function showDictItem() {
+  dictAnswered = false;
+  const total = dictItems.length;
+  $('#dict-current').textContent = `${dictIdx + 1}/${total}`;
+  $('#dict-score-live').innerHTML = `<span style="color:var(--green)">✓ ${dictCorrect}</span> &nbsp; <span style="color:var(--red)">✗ ${dictWrong}</span>`;
+  $('#dict-progress-fill').style.width = ((dictIdx / total) * 100) + '%';
+  $('#dict-input').value = '';
+  $('#dict-feedback').innerHTML = '';
+  $('#dict-check').style.display = '';
+  $('#dict-skip').style.display = '';
+  $('#dict-next').style.display = 'none';
+  $('#dict-input').focus();
+}
+
+$('#dict-play-btn').addEventListener('click', () => {
+  if (dictIdx < dictItems.length) dictSpeak(dictItems[dictIdx]);
+});
+
+function checkDictAnswer() {
+  if (dictAnswered) return;
+  dictAnswered = true;
+  const answer = dictItems[dictIdx];
+  const typed = $('#dict-input').value.trim();
+  const isCorrect = typed.toLowerCase() === answer.toLowerCase();
+
+  if (isCorrect) {
+    dictCorrect++;
+    $('#dict-feedback').innerHTML = `<span class="correct">✓ Chính xác!</span>`;
+  } else {
+    dictWrong++;
+    let diffHtml = '';
+    const aLow = answer.toLowerCase(), tLow = (typed || '').toLowerCase();
+    for (let i = 0; i < answer.length; i++) {
+      const cls = (i < tLow.length && tLow[i] === aLow[i]) ? 'diff-char-ok' : 'diff-char-err';
+      diffHtml += `<span class="${cls}">${answer[i]}</span>`;
+    }
+    $('#dict-feedback').innerHTML = typed
+      ? `<span class="wrong">${esc(typed)}</span><br><span class="answer">${diffHtml}</span>`
+      : `<span class="answer">${esc(answer)}</span>`;
+  }
+
+  dictResults.push({ answer, typed, ok: isCorrect });
+  $('#dict-score-live').innerHTML = `<span style="color:var(--green)">✓ ${dictCorrect}</span> &nbsp; <span style="color:var(--red)">✗ ${dictWrong}</span>`;
+  $('#dict-check').style.display = 'none';
+  $('#dict-skip').style.display = 'none';
+  $('#dict-next').style.display = '';
+}
+
+$('#dict-check').addEventListener('click', checkDictAnswer);
+
+$('#dict-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (dictAnswered) dictNext();
+    else checkDictAnswer();
+  }
+});
+
+$('#dict-skip').addEventListener('click', () => {
+  dictAnswered = true;
+  dictWrong++;
+  const answer = dictItems[dictIdx];
+  dictResults.push({ answer, typed: '', ok: false });
+  $('#dict-feedback').innerHTML = `<span class="answer">${esc(answer)}</span>`;
+  $('#dict-score-live').innerHTML = `<span style="color:var(--green)">✓ ${dictCorrect}</span> &nbsp; <span style="color:var(--red)">✗ ${dictWrong}</span>`;
+  $('#dict-check').style.display = 'none';
+  $('#dict-skip').style.display = 'none';
+  $('#dict-next').style.display = '';
+});
+
+function dictNext() {
+  dictIdx++;
+  if (dictIdx >= dictItems.length) { showDictResult(); return; }
+  showDictItem();
+  dictSpeak(dictItems[dictIdx]);
+}
+
+$('#dict-next').addEventListener('click', dictNext);
+
+function showDictResult() {
+  $('#dict-play').style.display = 'none';
+  $('#dict-result').style.display = 'block';
+  $('#dict-progress-fill').style.width = '100%';
+  const total = dictCorrect + dictWrong;
+  const pct = total ? Math.round((dictCorrect / total) * 100) : 0;
+  $('#dict-r-correct').textContent = dictCorrect;
+  $('#dict-r-wrong').textContent = dictWrong;
+  $('#dict-r-pct').textContent = pct + '%';
+  $('#dict-r-list').innerHTML = dictResults.map(r => `
+    <div class="dict-r-item ${r.ok ? 'ok' : 'fail'}">
+      <span class="dict-r-icon">${r.ok ? '✓' : '✗'}</span>
+      <span class="dict-r-word">${esc(r.answer)}</span>
+      ${!r.ok && r.typed ? `<span class="dict-r-typed">→ ${esc(r.typed)}</span>` : ''}
+    </div>`).join('');
+  saveDictHistory(total, dictCorrect, pct);
+  recordStudy();
+}
+
+function saveDictHistory(total, correct, pct) {
+  const hist = JSON.parse(localStorage.getItem('ielts-dict-history') || '[]');
+  hist.unshift({ mode: dictMode, topic: dictTopic, total, correct, pct, date: Date.now() });
+  if (hist.length > 30) hist.length = 30;
+  localStorage.setItem('ielts-dict-history', JSON.stringify(hist));
+  renderDictHistory();
+}
+
+function renderDictHistory() {
+  const hist = JSON.parse(localStorage.getItem('ielts-dict-history') || '[]');
+  const el = $('#dict-history');
+  if (!el) return;
+  if (!hist.length) { el.innerHTML = '<div class="empty-state"><i class="icon-ear"></i>Chưa có lịch sử</div>'; return; }
+  el.innerHTML = hist.slice(0, 10).map(h => `
+    <div class="timer-entry">
+      <span class="timer-entry-label">${h.mode === 'word' ? 'Từ' : 'Câu'}${h.topic !== 'all' ? ' · ' + h.topic : ''}</span>
+      <span style="color:var(--green)">${h.correct}/${h.total}</span>
+      <span style="color:var(--accent);font-weight:700">${h.pct}%</span>
+      <span class="timer-entry-meta">${new Date(h.date).toLocaleDateString('vi-VN')}</span>
+    </div>`).join('');
+}
+
+$('#dict-quit').addEventListener('click', () => {
+  speechSynthesis.cancel();
+  if (dictResults.length) showDictResult();
+  else { $('#dict-play').style.display = 'none'; $('#dict-setup').style.display = 'block'; }
+});
+
+$('#dict-retry').addEventListener('click', () => {
+  $('#dict-result').style.display = 'none';
+  $('#dict-setup').style.display = 'none';
+  $('#dict-play').style.display = 'block';
+  dictIdx = 0; dictCorrect = 0; dictWrong = 0; dictResults = [];
+  dictItems = getDictItems();
+  showDictItem();
+});
+
+$('#dict-back').addEventListener('click', () => {
+  $('#dict-result').style.display = 'none';
+  $('#dict-setup').style.display = 'block';
+});
+
+// Preload voices
+if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = () => {};
+renderDictHistory();
+
 // ===== SEED SAMPLE DATA =====
 function seedSampleData() {
   const isFirstLoad = !DATA_KEYS.some(k => localStorage.getItem('ielts-' + k));
@@ -1110,9 +1325,10 @@ function seedSampleData() {
 
   // Scores
   const scores = [
-    { id: 'ss1', date: d(14), l: 5.5, r: 5, w: 5, s: 5.5, overall: 5.5, created: t(14) },
-    { id: 'ss2', date: d(7), l: 6, r: 5.5, w: 5.5, s: 6, overall: 5.5, created: t(7) },
-    { id: 'ss3', date: d(1), l: 6.5, r: 6, w: 6, s: 6, overall: 6, created: t(1) },
+    { id: 'ss1', date: d(21), l: 4, r: 4, w: 4, s: 4.5, overall: 4, created: t(21) },
+    { id: 'ss2', date: d(14), l: 4.5, r: 4.5, w: 4, s: 4.5, overall: 4.5, created: t(14) },
+    { id: 'ss3', date: d(7), l: 5, r: 4.5, w: 4.5, s: 5, overall: 5, created: t(7) },
+    { id: 'ss4', date: d(1), l: 5, r: 5, w: 5, s: 5, overall: 5, created: t(1) },
   ];
 
   // Sessions
