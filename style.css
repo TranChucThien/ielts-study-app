@@ -414,6 +414,19 @@ input[type="text"], input[type="password"], input[type="number"], input[type="da
   transition: border-color 0.2s;
 }
 
+input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+}
+
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
 textarea { resize: vertical; min-height: 80px; }
 
@@ -1130,7 +1143,7 @@ textarea { resize: vertical; min-height: 80px; }
   #timer-clock { font-size: 2.4rem; }
 
   .score-inputs { grid-template-columns: repeat(4, 1fr); gap: 0.3rem; }
-  .score-form input[type="date"] { margin-bottom: 0.3rem; }
+  .score-form input[type="date"] { margin-bottom: 0.3rem; padding: 0.6rem 0.8rem; }
 
   .card { padding: 1rem; }
   .tabs { gap: 0.25rem; }
