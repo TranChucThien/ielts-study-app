@@ -233,6 +233,8 @@ window.toggleQuickFc = () => {
   $('#quick-fc-hint').style.display = quickFcFlipped ? 'none' : '';
 };
 
+$('#quick-fc-body').addEventListener('click', () => toggleQuickFc());
+
 
 window.skipQuickFc = () => {
   quickFcIdx++;
