@@ -787,6 +787,90 @@ textarea { resize: vertical; min-height: 80px; }
 }
 .ses-entry-actions button:hover { opacity: 1; }
 
+/* ===== VOCABULARY ===== */
+.voc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.5rem;
+  transition: border-color 0.15s;
+}
+
+.voc-card:hover { border-color: var(--accent); }
+
+.voc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.voc-word-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.voc-word { font-size: 1.05rem; font-weight: 700; }
+.voc-type {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: var(--surface2);
+  color: var(--accent);
+  font-weight: 600;
+  font-style: italic;
+}
+
+.voc-phonetic { font-size: 0.8rem; color: var(--text2); font-style: italic; }
+.voc-meaning { font-size: 0.9rem; color: var(--green); margin: 0.3rem 0; font-weight: 500; }
+.voc-example { font-size: 0.8rem; color: var(--text2); font-style: italic; line-height: 1.4; }
+
+.voc-synonyms {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0.4rem;
+}
+
+.voc-syn {
+  font-size: 0.6rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: #1a2a4a;
+  color: #93c5fd;
+}
+
+.voc-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.voc-topic-tag {
+  font-size: 0.6rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  background: var(--surface2);
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.voc-actions { display: flex; gap: 0.2rem; }
+.voc-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  opacity: 0.4;
+  padding: 0.3rem;
+  transition: opacity 0.15s;
+}
+.voc-actions button:hover { opacity: 1; }
+
 /* ===== SCORES ===== */
 .score-form { display: flex; flex-direction: column; gap: 0.3rem; }
 

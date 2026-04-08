@@ -2,7 +2,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
 // ===== DATA STORE =====
-const DATA_KEYS = ['notes', 'flashcards', 'streak', 'checklist', 'history', 'settings', 'scores', 'sessions'];
+const DATA_KEYS = ['notes', 'flashcards', 'streak', 'checklist', 'history', 'settings', 'scores', 'sessions', 'vocabulary'];
 
 const store = {
   get(k) {
@@ -97,7 +97,7 @@ $$('.bnav').forEach(b => b.addEventListener('click', () => navigateTo(b.dataset.
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 function today() { return new Date().toISOString().slice(0, 10); }
 function fmtTime(s) { return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; }
-function refreshAll() { refreshDashboard(); renderFcList(); renderNotes(); renderScores(); renderCalendar(); }
+function refreshAll() { refreshDashboard(); renderFcList(); renderNotes(); renderScores(); renderCalendar(); renderVocab(); }
 
 // ===== QUOTES =====
 const QUOTES = [
@@ -668,6 +668,152 @@ $('#cal-grid')?.addEventListener('touchend', e => {
     else { $('#cal-next').click(); }
   }
 }, { passive: true });
+
+// ===== VOCABULARY =====
+let vocEditId = null;
+
+$('#voc-add-btn').addEventListener('click', () => {
+  $('#voc-form').style.display = 'block'; vocEditId = null;
+  $('#voc-word').value = ''; $('#voc-meaning').value = ''; $('#voc-phonetic').value = '';
+  $('#voc-example').value = ''; $('#voc-synonym').value = ''; $('#voc-type').value = ''; $('#voc-topic').value = 'other';
+  $('#voc-word').focus();
+});
+
+$('#voc-cancel').addEventListener('click', () => { $('#voc-form').style.display = 'none'; });
+
+$('#voc-save').addEventListener('click', () => {
+  const word = $('#voc-word').value.trim(), meaning = $('#voc-meaning').value.trim();
+  if (!word || !meaning) return;
+  const vocab = store.get('vocabulary');
+  const entry = {
+    word, meaning,
+    type: $('#voc-type').value,
+    phonetic: $('#voc-phonetic').value.trim(),
+    example: $('#voc-example').value.trim(),
+    synonyms: $('#voc-synonym').value.trim().split(',').map(s => s.trim()).filter(Boolean),
+    topic: $('#voc-topic').value
+  };
+  if (vocEditId) {
+    const v = vocab.find(v => v.id === vocEditId);
+    if (v) Object.assign(v, entry);
+    vocEditId = null;
+  } else {
+    entry.id = crypto.randomUUID();
+    entry.created = Date.now();
+    vocab.push(entry);
+    // Also add to flashcards
+    const cards = store.get('flashcards');
+    cards.push({ id: crypto.randomUUID(), front: word, back: meaning, example: entry.example, deck: 'general', score: 0, lastReview: null });
+    store.set('flashcards', cards);
+  }
+  store.set('vocabulary', vocab);
+  $('#voc-form').style.display = 'none';
+  renderVocab(); refreshDashboard(); recordStudy(); scheduleSync();
+  toast('✅ Đã lưu từ vựng!');
+});
+
+$('#voc-filter-topic').addEventListener('change', () => renderVocab());
+$('#voc-search').addEventListener('input', () => renderVocab());
+
+function renderVocab() {
+  const topic = $('#voc-filter-topic').value;
+  const filter = ($('#voc-search').value || '').toLowerCase();
+  const topicLabels = { environment: '🌍 Environment', education: '🎓 Education', technology: '💻 Technology', health: '🏥 Health', society: '👥 Society', work: '💼 Work', other: '📌 Other' };
+  const vocab = store.get('vocabulary')
+    .filter(v => topic === 'all' || v.topic === topic)
+    .filter(v => !filter || (v.word + v.meaning).toLowerCase().includes(filter))
+    .sort((a, b) => (b.created || 0) - (a.created || 0));
+
+  $('#voc-count').textContent = `${vocab.length} từ`;
+  if (!vocab.length) { $('#voc-list').innerHTML = '<div class="empty-state">Chưa có từ vựng nào</div>'; return; }
+
+  $('#voc-list').innerHTML = vocab.map(v => `
+    <div class="voc-card">
+      <div class="voc-header">
+        <div>
+          <div class="voc-word-line">
+            <span class="voc-word">${esc(v.word)}</span>
+            ${v.type ? `<span class="voc-type">${v.type}</span>` : ''}
+          </div>
+          ${v.phonetic ? `<div class="voc-phonetic">${esc(v.phonetic)}</div>` : ''}
+        </div>
+      </div>
+      <div class="voc-meaning">${esc(v.meaning)}</div>
+      ${v.example ? `<div class="voc-example">“${esc(v.example)}”</div>` : ''}
+      ${v.synonyms?.length ? `<div class="voc-synonyms">${v.synonyms.map(s => `<span class="voc-syn">≈ ${esc(s)}</span>`).join('')}</div>` : ''}
+      <div class="voc-meta">
+        <span class="voc-topic-tag">${topicLabels[v.topic] || v.topic}</span>
+        <div class="voc-actions">
+          <button onclick="editVoc('${v.id}')">✏️</button>
+          <button onclick="deleteVoc('${v.id}')">🗑️</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+window.editVoc = id => {
+  const v = store.get('vocabulary').find(v => v.id === id); if (!v) return;
+  vocEditId = id;
+  $('#voc-form').style.display = 'block';
+  $('#voc-word').value = v.word; $('#voc-meaning').value = v.meaning;
+  $('#voc-type').value = v.type || ''; $('#voc-phonetic').value = v.phonetic || '';
+  $('#voc-example').value = v.example || ''; $('#voc-synonym').value = (v.synonyms || []).join(', ');
+  $('#voc-topic').value = v.topic || 'other';
+  $('#voc-word').focus();
+};
+
+window.deleteVoc = id => {
+  if (!confirm('Xoá từ này?')) return;
+  store.set('vocabulary', store.get('vocabulary').filter(v => v.id !== id));
+  renderVocab(); scheduleSync();
+};
+
+// Sample data
+const SAMPLE_VOCAB = [
+  { word: 'deteriorate', type: 'v', meaning: 'xuống cấp, xấu đi', phonetic: '/dɪˈtɪəriəreɪt/', example: 'Air quality has deteriorated significantly.', synonyms: ['decline', 'worsen'], topic: 'environment' },
+  { word: 'sustainable', type: 'adj', meaning: 'bền vững', phonetic: '/səˈsteɪnəbl/', example: 'We need sustainable energy sources.', synonyms: ['viable', 'long-term'], topic: 'environment' },
+  { word: 'curriculum', type: 'n', meaning: 'chương trình giảng dạy', phonetic: '/kəˈrɪkjʊləm/', example: 'The school updated its curriculum.', synonyms: ['syllabus', 'program'], topic: 'education' },
+  { word: 'innovative', type: 'adj', meaning: 'sáng tạo, đổi mới', phonetic: '/ˈɪnəveɪtɪv/', example: 'Innovative teaching methods improve learning.', synonyms: ['creative', 'groundbreaking'], topic: 'education' },
+  { word: 'ubiquitous', type: 'adj', meaning: 'có mặt khắp nơi', phonetic: '/juːˈbɪkwɪtəs/', example: 'Smartphones have become ubiquitous.', synonyms: ['omnipresent', 'widespread'], topic: 'technology' },
+  { word: 'exacerbate', type: 'v', meaning: 'làm trầm trọng thêm', phonetic: '/ɪɡˈzæsərbeɪt/', example: 'Pollution exacerbates health problems.', synonyms: ['aggravate', 'worsen'], topic: 'health' },
+  { word: 'phenomenon', type: 'n', meaning: 'hiện tượng', phonetic: '/fəˈnɒmɪnən/', example: 'Global warming is a well-documented phenomenon.', synonyms: ['occurrence', 'event'], topic: 'environment' },
+  { word: 'predominantly', type: 'adv', meaning: 'chủ yếu, phần lớn', phonetic: '/prɪˈdɒmɪnəntli/', example: 'The workforce is predominantly young.', synonyms: ['mainly', 'mostly'], topic: 'society' },
+  { word: 'fluctuate', type: 'v', meaning: 'dao động, biến đổi', phonetic: '/ˈflʌktʃueɪt/', example: 'Prices fluctuate throughout the year.', synonyms: ['vary', 'oscillate'], topic: 'work' },
+  { word: 'infrastructure', type: 'n', meaning: 'cơ sở hạ tầng', phonetic: '/ˈɪnfrəstrʌktʃər/', example: 'The government invested in infrastructure.', synonyms: ['framework', 'foundation'], topic: 'society' },
+  { word: 'autonomous', type: 'adj', meaning: 'tự chủ, tự trị', phonetic: '/ɔːˈtɒnəməs/', example: 'Autonomous vehicles are being tested.', synonyms: ['independent', 'self-governing'], topic: 'technology' },
+  { word: 'alleviate', type: 'v', meaning: 'giảm bớt, xoa dịu', phonetic: '/əˈliːvieɪt/', example: 'Medicine can alleviate pain.', synonyms: ['relieve', 'ease'], topic: 'health' },
+  { word: 'compelling', type: 'adj', meaning: 'thuyết phục, hấp dẫn', phonetic: '/kəmˈpelɪŋ/', example: 'She made a compelling argument.', synonyms: ['convincing', 'persuasive'], topic: 'other' },
+  { word: 'disparity', type: 'n', meaning: 'sự chênh lệch', phonetic: '/dɪˈspærəti/', example: 'Income disparity is a growing concern.', synonyms: ['inequality', 'gap'], topic: 'society' },
+  { word: 'proficiency', type: 'n', meaning: 'sự thành thạo', phonetic: '/prəˈfɪʃənsi/', example: 'Language proficiency is essential.', synonyms: ['competence', 'expertise'], topic: 'education' },
+  { word: 'mitigate', type: 'v', meaning: 'giảm thiểu', phonetic: '/ˈmɪtɪɡeɪt/', example: 'Trees help mitigate climate change.', synonyms: ['reduce', 'lessen'], topic: 'environment' },
+  { word: 'unprecedented', type: 'adj', meaning: 'chưa từng có tiền lệ', phonetic: '/ʌnˈpresɪdentɪd/', example: 'The pandemic caused unprecedented disruption.', synonyms: ['unparalleled', 'unheard-of'], topic: 'society' },
+  { word: 'sedentary', type: 'adj', meaning: 'ít vận động', phonetic: '/ˈsedəntri/', example: 'A sedentary lifestyle leads to health issues.', synonyms: ['inactive', 'stationary'], topic: 'health' },
+  { word: 'versatile', type: 'adj', meaning: 'đa năng, linh hoạt', phonetic: '/ˈvɜːsətaɪl/', example: 'She is a versatile employee.', synonyms: ['adaptable', 'flexible'], topic: 'work' },
+  { word: 'proliferation', type: 'n', meaning: 'sự gia tăng nhanh', phonetic: '/prəˌlɪfəˈreɪʃən/', example: 'The proliferation of social media changed communication.', synonyms: ['spread', 'expansion'], topic: 'technology' },
+  { word: 'detrimental', type: 'adj', meaning: 'có hại', phonetic: '/ˌdetrɪˈmentl/', example: 'Smoking is detrimental to health.', synonyms: ['harmful', 'damaging'], topic: 'health' },
+  { word: 'incentive', type: 'n', meaning: 'động lực, ưu đãi', phonetic: '/ɪnˈsentɪv/', example: 'Tax incentives encourage investment.', synonyms: ['motivation', 'stimulus'], topic: 'work' },
+  { word: 'eradicate', type: 'v', meaning: 'xóa bỏ, loại trừ', phonetic: '/ɪˈrædɪkeɪt/', example: 'Efforts to eradicate poverty continue.', synonyms: ['eliminate', 'abolish'], topic: 'society' },
+  { word: 'cognitive', type: 'adj', meaning: 'thuộc nhận thức', phonetic: '/ˈkɒɡnətɪv/', example: 'Reading improves cognitive abilities.', synonyms: ['mental', 'intellectual'], topic: 'education' },
+  { word: 'biodiversity', type: 'n', meaning: 'đa dạng sinh học', phonetic: '/ˌbaɪəʊdaɪˈvɜːsəti/', example: 'Deforestation threatens biodiversity.', synonyms: ['ecological variety'], topic: 'environment' }
+];
+
+$('#voc-sample-btn').addEventListener('click', () => {
+  const vocab = store.get('vocabulary');
+  const cards = store.get('flashcards');
+  const existingWords = new Set(vocab.map(v => v.word.toLowerCase()));
+  let added = 0;
+  SAMPLE_VOCAB.forEach(s => {
+    if (existingWords.has(s.word.toLowerCase())) return;
+    const id = crypto.randomUUID();
+    vocab.push({ ...s, id, created: Date.now() });
+    cards.push({ id: crypto.randomUUID(), front: s.word, back: s.meaning, example: s.example, deck: 'general', score: 0, lastReview: null });
+    added++;
+  });
+  store.set('vocabulary', vocab);
+  store.set('flashcards', cards);
+  renderVocab(); renderFcList(); refreshDashboard(); scheduleSync();
+  toast(`📦 Đã thêm ${added} từ mẫu!`);
+});
 
 // ===== SCORES =====
 $('#score-date').value = today();

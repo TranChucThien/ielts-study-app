@@ -20,7 +20,7 @@
     <button class="nav-btn" data-page="notes">📝 Notes</button>
     <button class="nav-btn" data-page="timer">⏱️ Timer</button>
     <button class="nav-btn" data-page="calendar">📅 Calendar</button>
-    <button class="nav-btn" data-page="scores">📈 Scores</button>
+    <button class="nav-btn" data-page="vocab">📚 Vocabulary</button>
     <button class="nav-btn" data-page="settings">⚙️ Settings</button>
     <div class="sync-status" id="sync-status">⏸ Chưa kết nối</div>
   </nav>
@@ -32,6 +32,7 @@
     <button class="bnav" data-page="notes">📝<span>Notes</span></button>
     <button class="bnav" data-page="timer">⏱️<span>Timer</span></button>
     <button class="bnav" data-page="calendar">📅<span>Calendar</span></button>
+    <button class="bnav" data-page="vocab">📚<span>Vocab</span></button>
     <button class="bnav" data-page="settings">⚙️<span>More</span></button>
   </nav>
 
@@ -301,7 +302,58 @@
       </div>
     </section>
 
-    <!-- SCORES -->
+    <!-- VOCABULARY -->
+    <section id="page-vocab" class="page">
+      <h2>📚 Vocabulary</h2>
+      <div class="fc-controls">
+        <button id="voc-add-btn" class="btn-primary">+ Thêm từ</button>
+        <button id="voc-sample-btn" class="btn-secondary">📦 Import mẫu</button>
+        <select id="voc-filter-topic" class="deck-filter">
+          <option value="all">Tất cả topic</option>
+          <option value="environment">🌍 Environment</option>
+          <option value="education">🎓 Education</option>
+          <option value="technology">💻 Technology</option>
+          <option value="health">🏥 Health</option>
+          <option value="society">👥 Society</option>
+          <option value="work">💼 Work</option>
+          <option value="other">📌 Other</option>
+        </select>
+        <span id="voc-count"></span>
+      </div>
+      <input type="text" id="voc-search" placeholder="🔍 Tìm từ vựng...">
+      <div id="voc-form" class="card" style="display:none">
+        <input type="text" id="voc-word" placeholder="Từ vựng (VD: deteriorate)">
+        <select id="voc-type">
+          <option value="">-- Loại từ --</option>
+          <option value="n">Noun (n)</option>
+          <option value="v">Verb (v)</option>
+          <option value="adj">Adjective (adj)</option>
+          <option value="adv">Adverb (adv)</option>
+          <option value="phrase">Phrase</option>
+          <option value="idiom">Idiom</option>
+        </select>
+        <input type="text" id="voc-meaning" placeholder="Nghĩa tiếng Việt">
+        <input type="text" id="voc-phonetic" placeholder="Phiên âm (VD: /dɪˈtɪəriəreɪt/)">
+        <textarea id="voc-example" placeholder="Ví dụ..." rows="2"></textarea>
+        <input type="text" id="voc-synonym" placeholder="Từ đồng nghĩa (cách nhau bởi dấu phẩy)">
+        <select id="voc-topic">
+          <option value="other">📌 Other</option>
+          <option value="environment">🌍 Environment</option>
+          <option value="education">🎓 Education</option>
+          <option value="technology">💻 Technology</option>
+          <option value="health">🏥 Health</option>
+          <option value="society">👥 Society</option>
+          <option value="work">💼 Work</option>
+        </select>
+        <div class="form-actions">
+          <button id="voc-save" class="btn-primary">Lưu</button>
+          <button id="voc-cancel" class="btn-secondary">Huỷ</button>
+        </div>
+      </div>
+      <div id="voc-list"></div>
+    </section>
+
+    <!-- SCORES (hidden, accessible from Settings) -->
     <section id="page-scores" class="page">
       <h2>📈 Band Score Tracker</h2>
       <div class="card">
