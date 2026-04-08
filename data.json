@@ -9,7 +9,17 @@
       "date": 1775618330407
     }
   ],
-  "flashcards": [],
+  "flashcards": [
+    {
+      "id": "6cffed91-7f26-4829-897b-b4ce442190bc",
+      "front": "test",
+      "back": "back",
+      "example": "ví dụ",
+      "deck": "listening",
+      "score": 0,
+      "lastReview": null
+    }
+  ],
   "streak": {
     "count": 1,
     "lastDate": "2026-04-08"
