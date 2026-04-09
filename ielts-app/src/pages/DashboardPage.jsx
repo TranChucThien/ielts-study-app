@@ -145,19 +145,19 @@ export default function DashboardPage() {
 
       {/* Stats */}
       <div className="dashboard-grid">
-        <div className="card stat-card grad-cyan" onClick={(e) => { e.stopPropagation(); setBandOpen(!bandOpen) }} style={{ cursor: 'pointer', position: 'relative' }}>
+        <div className="card stat-card grad-cyan" onClick={(e) => { e.stopPropagation(); setBandOpen(!bandOpen) }} style={{ cursor: 'pointer', zIndex: bandOpen ? 60 : 'auto' }}>
           <ProgressRing current={settings.targetBand} target={9} />
-          <div className="stat-info">
+          <div className="stat-info" style={{ position: 'relative' }}>
             <span className="stat-label">Mục tiêu</span>
-            <span className="stat-value">{settings.targetBand || '6.5'}</span>
+            <span className="stat-value">{settings.targetBand || '6.5'} ▾</span>
+            {bandOpen && (
+              <div className="custom-select-options open" style={{ position: 'absolute', top: '100%', left: 0, marginTop: 4, zIndex: 100 }} onClick={e => e.stopPropagation()}>
+                {['5.0','5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0'].map(v => (
+                  <div key={v} className={`custom-select-option${settings.targetBand === v ? ' active' : ''}`} onClick={() => handleBand(v)}>{v}</div>
+                ))}
+              </div>
+            )}
           </div>
-          {bandOpen && (
-            <div className="custom-select-options open" style={{ position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)', marginTop: 6, zIndex: 50 }} onClick={e => e.stopPropagation()}>
-              {['5.0','5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0'].map(v => (
-                <div key={v} className={`custom-select-option${settings.targetBand === v ? ' active' : ''}`} onClick={() => handleBand(v)}>{v}</div>
-              ))}
-            </div>
-          )}
         </div>
         <div className="card stat-card grad-warm">
           <div className="stat-icon"><Flame size={28} /></div>
