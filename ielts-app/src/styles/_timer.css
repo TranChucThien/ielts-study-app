@@ -1,0 +1,91 @@
+/* ===== TIMER PRESETS ===== */
+.timer-presets h3 {
+  margin: 1.2rem 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.timer-presets h3:first-child { margin-top: 0; }
+
+.preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.5rem;
+}
+
+.preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 1rem;
+  background: rgba(15,23,41,0.6);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.preset-btn:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 0 12px rgba(99,102,241,0.15);
+}
+.preset-btn:active { transform: translateY(0); }
+.preset-time { font-size: 1.3rem; font-weight: 700; }
+.preset-name { font-size: 0.75rem; color: var(--text2); }
+
+.custom-timer { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.3rem; }
+.custom-timer input { width: 80px; margin: 0; text-align: center; }
+.custom-timer span { color: var(--text2); font-size: 0.85rem; }
+
+/* ===== TIMER DISPLAY ===== */
+#timer-display { text-align: center; padding: 1rem 0; }
+#timer-label { font-size: 1rem; color: var(--text2); margin-bottom: 1rem; font-weight: 500; }
+
+#timer-ring {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 1.5rem;
+}
+#timer-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.ring-bg { fill: none; stroke: var(--surface2); stroke-width: 8; }
+.ring-progress {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 565.48;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1s linear;
+}
+
+#timer-clock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-actions { display: flex; justify-content: center; gap: 0.8rem; }
+
+/* ===== TIMER HISTORY ===== */
+.timer-entry {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+.timer-entry:last-child { border-bottom: none; }
+.timer-entry-label { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.timer-entry-meta { color: var(--text2); font-size: 0.7rem; text-align: right; white-space: nowrap; }

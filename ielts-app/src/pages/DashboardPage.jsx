@@ -60,7 +60,6 @@ export default function DashboardPage() {
   const { user } = useAuth()
   const [sessions, setSessions] = useState([])
   const [vocab, setVocab] = useState([])
-  const [flashcards, setFlashcards] = useState([])
   const [settings, setSettings] = useState({ targetBand: '6.5' })
   const [dailyCheck, setDailyCheck] = useState({})
   const [bandOpen, setBandOpen] = useState(false)
@@ -72,20 +71,15 @@ export default function DashboardPage() {
   const loadData = useCallback(async () => {
     if (!user) return
     setLoading(true)
-    const [ses, voc, fc, sett] = await Promise.all([
+    const [ses, voc, sett] = await Promise.all([
       getUserCollection(user.uid, 'sessions'),
       getUserCollection(user.uid, 'vocabulary'),
-      getUserCollection(user.uid, 'flashcards'),
       getUserDoc(user.uid, 'settings'),
     ])
-    setSessions(ses); setVocab(voc); setFlashcards(fc)
+    setSessions(ses); setVocab(voc)
     if (sett) setSettings(sett)
     setDailyCheck(sett?.dailyCheck?.[today()] || {})
     if (voc.length) setWotd(voc[Math.floor(Math.random() * voc.length)])
-    else if (fc.length) {
-      const c = fc[Math.floor(Math.random() * fc.length)]
-      setWotd({ word: c.front, meaning: c.back, example: c.example })
-    }
     setLoading(false)
   }, [user])
 
@@ -177,8 +171,8 @@ export default function DashboardPage() {
         <div className="card stat-card grad-indigo">
           <div className="stat-icon"><Layers size={28} /></div>
           <div className="stat-info">
-            <span className="stat-label">Flashcards</span>
-            <span className="stat-value count-up">{flashcards.length}</span>
+            <span className="stat-label">Đã ôn tập</span>
+            <span className="stat-value count-up">{vocab.filter(v => v.lastReviewed).length}/{vocab.length}</span>
           </div>
         </div>
         <div className="card stat-card grad-emerald">

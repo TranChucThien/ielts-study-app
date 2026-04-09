@@ -1,0 +1,10 @@
+/* ===== SETTINGS ===== */
+#gh-status {
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
+  display: none;
+}
+#gh-status.success { display: block; background: rgba(16,185,129,0.15); color: #86efac; }
+#gh-status.error { display: block; background: rgba(244,63,94,0.15); color: #fca5a5; }

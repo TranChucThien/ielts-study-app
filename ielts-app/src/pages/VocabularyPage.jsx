@@ -18,11 +18,10 @@ function speak(word) {
 }
 
 function getMastery(v) {
-  if (!v.createdAt) return 'new'
-  const age = (Date.now() - v.createdAt) / 86400000
-  if (age < 3) return 'new'
-  if (age < 14) return 'learning'
-  return 'mastered'
+  if (!v.lastReviewed) return 'new'
+  const reviewAge = (Date.now() - v.lastReviewed) / 86400000
+  if (reviewAge < 7) return 'mastered'
+  return 'learning'
 }
 
 const MASTERY_LABELS = { new: 'Mới', learning: 'Đang học', mastered: 'Thuộc' }

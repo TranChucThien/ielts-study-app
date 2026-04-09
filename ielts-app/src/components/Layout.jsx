@@ -10,10 +10,10 @@ const navItems = [
   { to: '/vocab', icon: BookOpen, label: 'Vocabulary' },
   { to: '/flashcards', icon: Layers, label: 'Flashcards' },
   { to: '/notes', icon: NotebookPen, label: 'Notes' },
-  { to: '/scores', icon: TrendingUp, label: 'Scores' },
-  { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/dictation', icon: Ear, label: 'Dictation' },
   { to: '/calendar', icon: CalendarRange, label: 'Calendar' },
+  { to: '/scores', icon: TrendingUp, label: 'Scores' },
+  { to: '/timer', icon: Timer, label: 'Timer' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ]
 

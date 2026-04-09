@@ -1,0 +1,73 @@
+/* ===== SCORE FORM ===== */
+.score-form { display: flex; flex-direction: column; gap: 0.3rem; }
+
+.score-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin: 0.3rem 0;
+}
+
+.score-field { text-align: center; }
+.score-field label { font-size: 0.75rem; color: var(--text2); display: block; margin-bottom: 0.2rem; }
+.score-field input { text-align: center; margin: 0; }
+
+/* ===== SCORE ENTRY ===== */
+.score-entry {
+  background: rgba(15,23,41,0.6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.score-entry-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.score-entry-date { font-size: 0.8rem; color: var(--text2); }
+.score-entry-overall { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+
+.score-entry-skills {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+.score-skill-label { font-size: 0.65rem; color: var(--text2); }
+.score-skill-value { font-size: 1rem; font-weight: 600; }
+
+.score-entry-actions { text-align: right; margin-top: 0.5rem; }
+.score-entry-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.4;
+  padding: 0.3rem;
+}
+.score-entry-actions button:hover { opacity: 1; }
+
+/* ===== SCORE CHART ===== */
+.score-chart-body { display: flex; align-items: flex-end; gap: 0.4rem; height: 140px; padding-top: 0.5rem; overflow-x: auto; }
+.score-bar-group { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; min-width: 50px; flex-shrink: 0; }
+.score-bar-cols { display: flex; align-items: flex-end; gap: 2px; height: 100px; }
+
+.score-bar {
+  width: 14px;
+  border-radius: 7px 7px 0 0;
+  min-height: 2px;
+  transition: height 0.3s;
+}
+.score-bar.bar-l { background: #67e8f9; }
+.score-bar.bar-r { background: #c4b5fd; }
+.score-bar.bar-w { background: #fde68a; }
+.score-bar.bar-s { background: #fda4af; }
+
+.score-bar-date { font-size: 0.55rem; color: var(--text2); }
+.score-bar-overall { font-size: 0.65rem; font-weight: 700; color: var(--accent); }
+
+.score-chart-legend { display: flex; gap: 0.8rem; margin-top: 0.5rem; justify-content: center; }
+.score-chart-legend span { font-size: 0.6rem; color: var(--text2); display: flex; align-items: center; gap: 0.25rem; }
+.score-chart-legend span::before { content: ''; width: 8px; height: 8px; border-radius: 2px; }
+.score-chart-legend .leg-l::before { background: #67e8f9; }
+.score-chart-legend .leg-r::before { background: #c4b5fd; }
+.score-chart-legend .leg-w::before { background: #fde68a; }
+.score-chart-legend .leg-s::before { background: #fda4af; }

@@ -6,6 +6,7 @@ import { CardSkeleton } from '../components/Skeleton'
 import { NotebookPen, Headphones, BookOpenText, PenLine, Mic, BookOpen, Pencil, Trash2 } from 'lucide-react'
 
 const SKILLS = [
+  { key: 'general', label: 'General', icon: NotebookPen },
   { key: 'listening', label: 'Listening', icon: Headphones },
   { key: 'reading', label: 'Reading', icon: BookOpenText },
   { key: 'writing', label: 'Writing', icon: PenLine },
@@ -20,7 +21,7 @@ export default function NotesPage() {
   const toast = useToast()
   const [notes, setNotes] = useState([])
   const [loading, setLoading] = useState(true)
-  const [skill, setSkill] = useState('listening')
+  const [skill, setSkill] = useState('general')
   const [search, setSearch] = useState('')
   const [form, setForm] = useState({ title: '', content: '', tag: '' })
 
