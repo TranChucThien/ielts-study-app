@@ -1,12 +1,14 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { BookOpen, Layers, Timer, Ear, TrendingUp, CalendarRange } from 'lucide-react'
+import { BookOpen, Layers, Timer, Ear, TrendingUp, CalendarRange, PenLine, Languages } from 'lucide-react'
 
 const FEATURES = [
   { icon: BookOpen, label: 'Vocabulary' },
   { icon: Layers, label: 'Flashcards' },
-  { icon: Timer, label: 'Timer' },
+  { icon: PenLine, label: 'Writing' },
   { icon: Ear, label: 'Dictation' },
+  { icon: Languages, label: 'Translate' },
+  { icon: Timer, label: 'Timer' },
   { icon: TrendingUp, label: 'Scores' },
   { icon: CalendarRange, label: 'Calendar' },
 ]
@@ -21,7 +23,7 @@ export default function LoginPage() {
     <div className="login-wrapper">
       <div className="login-card">
         <div className="login-logo">IELTS Study Hub</div>
-        <p className="login-subtitle">Ứng dụng học IELTS cá nhân<br />Đồng bộ dữ liệu mọi lúc, mọi nơi</p>
+        <p className="login-subtitle">All-in-one IELTS — Từ vựng, Flashcards, Writing,<br />Dictation, Dịch, Timer & hơn thế nữa</p>
         <div className="login-features">
           {FEATURES.map(({ icon: Icon, label }) => (
             <div key={label} className="login-feature">
