@@ -1,0 +1,182 @@
+[
+  {
+    "word": "pollution",
+    "type": "n",
+    "meaning": "ô nhiễm",
+    "phonetic": "/pəˈluːʃən/",
+    "example": "Air pollution is a big problem in many cities.",
+    "synonyms": ["contamination"],
+    "topic": "environment"
+  },
+  {
+    "word": "recycle",
+    "type": "v",
+    "meaning": "tái chế",
+    "phonetic": "/riːˈsaɪkəl/",
+    "example": "We should recycle plastic bottles instead of throwing them away.",
+    "synonyms": ["reuse"],
+    "topic": "environment"
+  },
+  {
+    "word": "protect",
+    "type": "v",
+    "meaning": "bảo vệ",
+    "phonetic": "/prəˈtekt/",
+    "example": "We must protect the environment for future generations.",
+    "synonyms": ["guard", "preserve"],
+    "topic": "environment"
+  },
+  {
+    "word": "knowledge",
+    "type": "n",
+    "meaning": "kiến thức",
+    "phonetic": "/ˈnɒlɪdʒ/",
+    "example": "Reading books helps you gain more knowledge.",
+    "synonyms": ["understanding", "information"],
+    "topic": "education"
+  },
+  {
+    "word": "improve",
+    "type": "v",
+    "meaning": "cải thiện",
+    "phonetic": "/ɪmˈpruːv/",
+    "example": "I want to improve my English speaking skills.",
+    "synonyms": ["enhance", "develop"],
+    "topic": "education"
+  },
+  {
+    "word": "exam",
+    "type": "n",
+    "meaning": "kỳ thi",
+    "phonetic": "/ɪɡˈzæm/",
+    "example": "She studied hard for the final exam.",
+    "synonyms": ["test"],
+    "topic": "education"
+  },
+  {
+    "word": "device",
+    "type": "n",
+    "meaning": "thiết bị",
+    "phonetic": "/dɪˈvaɪs/",
+    "example": "Most people use electronic devices every day.",
+    "synonyms": ["gadget", "tool"],
+    "topic": "technology"
+  },
+  {
+    "word": "convenient",
+    "type": "adj",
+    "meaning": "tiện lợi",
+    "phonetic": "/kənˈviːniənt/",
+    "example": "Online shopping is very convenient.",
+    "synonyms": ["handy", "practical"],
+    "topic": "technology"
+  },
+  {
+    "word": "communicate",
+    "type": "v",
+    "meaning": "giao tiếp",
+    "phonetic": "/kəˈmjuːnɪkeɪt/",
+    "example": "The internet helps people communicate easily.",
+    "synonyms": ["talk", "connect"],
+    "topic": "technology"
+  },
+  {
+    "word": "exercise",
+    "type": "n",
+    "meaning": "tập thể dục",
+    "phonetic": "/ˈeksəsaɪz/",
+    "example": "Regular exercise is good for your health.",
+    "synonyms": ["workout", "training"],
+    "topic": "health"
+  },
+  {
+    "word": "healthy",
+    "type": "adj",
+    "meaning": "khỏe mạnh",
+    "phonetic": "/ˈhelθi/",
+    "example": "Eating vegetables helps you stay healthy.",
+    "synonyms": ["fit", "well"],
+    "topic": "health"
+  },
+  {
+    "word": "diet",
+    "type": "n",
+    "meaning": "chế độ ăn",
+    "phonetic": "/ˈdaɪət/",
+    "example": "A balanced diet is important for good health.",
+    "synonyms": ["nutrition", "food plan"],
+    "topic": "health"
+  },
+  {
+    "word": "community",
+    "type": "n",
+    "meaning": "cộng đồng",
+    "phonetic": "/kəˈmjuːnəti/",
+    "example": "Our community organized a clean-up event last weekend.",
+    "synonyms": ["society", "neighborhood"],
+    "topic": "society"
+  },
+  {
+    "word": "population",
+    "type": "n",
+    "meaning": "dân số",
+    "phonetic": "/ˌpɒpjuˈleɪʃən/",
+    "example": "The population of the city is growing fast.",
+    "synonyms": ["residents", "inhabitants"],
+    "topic": "society"
+  },
+  {
+    "word": "tradition",
+    "type": "n",
+    "meaning": "truyền thống",
+    "phonetic": "/trəˈdɪʃən/",
+    "example": "It is a tradition to eat together during holidays.",
+    "synonyms": ["custom", "culture"],
+    "topic": "society"
+  },
+  {
+    "word": "salary",
+    "type": "n",
+    "meaning": "lương",
+    "phonetic": "/ˈsæləri/",
+    "example": "He earns a good salary at his new job.",
+    "synonyms": ["wage", "income"],
+    "topic": "work"
+  },
+  {
+    "word": "experience",
+    "type": "n",
+    "meaning": "kinh nghiệm",
+    "phonetic": "/ɪkˈspɪəriəns/",
+    "example": "You need more experience to get this job.",
+    "synonyms": ["skill", "practice"],
+    "topic": "work"
+  },
+  {
+    "word": "colleague",
+    "type": "n",
+    "meaning": "đồng nghiệp",
+    "phonetic": "/ˈkɒliːɡ/",
+    "example": "I get along well with my colleagues.",
+    "synonyms": ["coworker"],
+    "topic": "work"
+  },
+  {
+    "word": "advantage",
+    "type": "n",
+    "meaning": "lợi thế, ưu điểm",
+    "phonetic": "/ədˈvɑːntɪdʒ/",
+    "example": "One advantage of living in a city is public transport.",
+    "synonyms": ["benefit", "plus"],
+    "topic": "other"
+  },
+  {
+    "word": "opinion",
+    "type": "n",
+    "meaning": "ý kiến",
+    "phonetic": "/əˈpɪnjən/",
+    "example": "In my opinion, education is very important.",
+    "synonyms": ["view", "thought"],
+    "topic": "other"
+  }
+]
