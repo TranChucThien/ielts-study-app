@@ -11,6 +11,8 @@ import FlashcardsPage from './pages/FlashcardsPage'
 import NotesPage from './pages/NotesPage'
 import ScoresPage from './pages/ScoresPage'
 import TimerPage from './pages/TimerPage'
+import WritingPage from './pages/WritingPage'
+import TranslatePage from './pages/TranslatePage'
 import DictationPage from './pages/DictationPage'
 import CalendarPage from './pages/CalendarPage'
 import SettingsPage from './pages/SettingsPage'
@@ -27,6 +29,8 @@ function AppRoutes() {
         <Route path="/notes" element={<NotesPage />} />
         <Route path="/scores" element={<ScoresPage />} />
         <Route path="/timer" element={<TimerPage />} />
+        <Route path="/writing" element={<WritingPage />} />
+        <Route path="/translate" element={<TranslatePage />} />
         <Route path="/dictation" element={<DictationPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/settings" element={<SettingsPage />} />

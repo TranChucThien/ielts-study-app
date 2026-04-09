@@ -6,7 +6,7 @@ import { QUOTES } from '../utils/sampleData'
 import { StatSkeleton, CardSkeleton } from '../components/Skeleton'
 import {
   Target, Flame, Layers, BookOpen, Lightbulb, Shuffle,
-  CalendarRange, CheckCircle, Timer, Ear, NotebookPen
+  CalendarRange, CheckCircle, Timer, Ear, NotebookPen, PenLine, Languages
 } from 'lucide-react'
 
 const today = () => new Date().toISOString().slice(0, 10)
@@ -51,9 +51,11 @@ function ProgressRing({ current, target }) {
 const QUICK_ACTIONS = [
   { to: '/vocab', icon: BookOpen, label: 'Từ vựng' },
   { to: '/flashcards', icon: Layers, label: 'Flashcards' },
-  { to: '/timer', icon: Timer, label: 'Timer' },
+  { to: '/writing', icon: PenLine, label: 'Writing' },
   { to: '/dictation', icon: Ear, label: 'Dictation' },
+  { to: '/translate', icon: Languages, label: 'Translate' },
   { to: '/notes', icon: NotebookPen, label: 'Notes' },
+  { to: '/timer', icon: Timer, label: 'Timer' },
 ]
 
 export default function DashboardPage() {
@@ -86,10 +88,6 @@ export default function DashboardPage() {
   useEffect(() => { loadData() }, [loadData])
 
   const streak = useMemo(() => calcStreak(sessions), [sessions])
-  const latestScore = useMemo(() => {
-    const scores = sessions // we don't have scores here, use settings
-    return null
-  }, [])
 
   const heatmapDates = useMemo(() => {
     const set = new Set(sessions.map(s => s.date))

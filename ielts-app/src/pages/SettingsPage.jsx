@@ -5,10 +5,10 @@ import { getUserCollection, addToUserCollection, deleteFromUserCollection, getUs
 import { collection, getDocs, doc, writeBatch } from 'firebase/firestore'
 import {
   Settings, Compass, TrendingUp, NotebookPen, Timer, Ear, CalendarRange,
-  Database, Download, Upload, Trash2, LogOut
+  Database, Download, Upload, Trash2, LogOut, PenLine, Languages
 } from 'lucide-react'
 
-const COLLECTIONS = ['vocabulary', 'flashcards', 'notes', 'scores', 'sessions', 'timerHistory', 'dictationHistory']
+const COLLECTIONS = ['vocabulary', 'flashcards', 'notes', 'scores', 'sessions', 'timerHistory', 'dictationHistory', 'writing', 'translateHistory']
 
 export default function SettingsPage() {
   const { user, signOut } = useAuth()
@@ -88,13 +88,15 @@ export default function SettingsPage() {
       <div className="card">
         <h3><Compass size={16} /> Xem thêm</h3>
         {[
+          { to: '/writing', icon: PenLine, label: 'Writing' },
+          { to: '/translate', icon: Languages, label: 'Translate' },
           { to: '/scores', icon: TrendingUp, label: 'Band Score Tracker' },
           { to: '/notes', icon: NotebookPen, label: 'Notes' },
           { to: '/timer', icon: Timer, label: 'Timer' },
           { to: '/dictation', icon: Ear, label: 'Dictation' },
           { to: '/calendar', icon: CalendarRange, label: 'Calendar' },
-        ].map(({ to, icon: Icon, label }) => (
-          <button key={to} className="btn-secondary" style={{ width: '100%', marginTop: to === '/scores' ? 0 : '0.5rem' }} onClick={() => navigate(to)}>
+        ].map(({ to, icon: Icon, label }, i) => (
+          <button key={to} className="btn-secondary" style={{ width: '100%', marginTop: i === 0 ? 0 : '0.5rem' }} onClick={() => navigate(to)}>
             <Icon size={14} /> {label}
           </button>
         ))}

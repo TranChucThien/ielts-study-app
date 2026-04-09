@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, BookOpen, Layers, NotebookPen, TrendingUp,
-  Timer, Ear, CalendarRange, Settings, Search
+  Timer, Ear, CalendarRange, Settings, Search, PenLine, Languages
 } from 'lucide-react'
 
 const COMMANDS = [
@@ -10,6 +10,8 @@ const COMMANDS = [
   { path: '/vocab', label: 'Vocabulary', icon: BookOpen },
   { path: '/flashcards', label: 'Flashcards', icon: Layers },
   { path: '/notes', label: 'Notes', icon: NotebookPen },
+  { path: '/writing', label: 'Writing', icon: PenLine },
+  { path: '/translate', label: 'Translate', icon: Languages },
   { path: '/scores', label: 'Scores', icon: TrendingUp },
   { path: '/timer', label: 'Timer', icon: Timer },
   { path: '/dictation', label: 'Dictation', icon: Ear },

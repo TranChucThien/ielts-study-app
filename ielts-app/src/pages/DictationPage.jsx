@@ -61,6 +61,7 @@ export default function DictationPage() {
     if (!pool.length) return toast(mode === 'word' ? 'Thêm từ vựng trước!' : 'Cần từ vựng có ví dụ!')
     setItems(pool); setIdx(0); setCorrect(0); setWrong(0); setResults([]); setAnswered(false); setFeedback(null); setInput('')
     setPhase('play')
+    setTimeout(() => { speak(pool[0]); inputRef.current?.focus() }, 300)
   }
 
   const checkAnswer = () => {

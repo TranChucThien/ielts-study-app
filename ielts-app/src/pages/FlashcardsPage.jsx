@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useFlashcards } from '../hooks/useFlashcards'
 import { useToast } from '../components/Toast'
 import { CardSkeleton } from '../components/Skeleton'
-import { Layers, SkipBack, SkipForward, BookOpen, Volume2 } from 'lucide-react'
+import { Layers, SkipBack, SkipForward, BookOpen, Volume2, Shuffle } from 'lucide-react'
 
 const DECKS = ['all', 'environment', 'education', 'technology', 'health', 'society', 'work', 'other']
 const DECK_LABELS = { all: 'Tất cả', environment: 'Environment', education: 'Education', technology: 'Technology', health: 'Health', society: 'Society', work: 'Work', other: 'Other' }
@@ -25,9 +25,21 @@ export default function FlashcardsPage() {
   const [studying, setStudying] = useState(false)
   const [studyIdx, setStudyIdx] = useState(0)
   const [flipped, setFlipped] = useState(false)
+  const [shuffled, setShuffled] = useState(false)
 
   const filtered = useMemo(() => cards.filter(c => deck === 'all' || c.deck === deck), [cards, deck])
-  const studyCards = useMemo(() => [...filtered].sort((a, b) => a.lastReviewed - b.lastReviewed), [filtered])
+  const studyCards = useMemo(() => {
+    const list = [...filtered]
+    if (shuffled) {
+      for (let i = list.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[list[i], list[j]] = [list[j], list[i]]
+      }
+    } else {
+      list.sort((a, b) => a.lastReviewed - b.lastReviewed)
+    }
+    return list
+  }, [filtered, shuffled])
 
   const startStudy = () => {
     if (!filtered.length) return toast('Thêm từ vựng trước!')
@@ -51,6 +63,11 @@ export default function FlashcardsPage() {
       <h2><Layers size={20} /> Flashcards</h2>
       <div className="fc-controls">
         <button className="btn-accent" onClick={startStudy}>▶ Học ngay</button>
+        <button className="btn-secondary" onClick={() => setShuffled(s => !s)}
+          style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+          title={shuffled ? 'Ngẫu nhiên' : 'Theo thứ tự'}>
+          <Shuffle size={14} />
+        </button>
         <select className="deck-filter" value={deck} onChange={e => setDeck(e.target.value)}>
           {DECKS.map(d => <option key={d} value={d}>{DECK_LABELS[d]}</option>)}
         </select>

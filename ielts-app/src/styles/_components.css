@@ -65,7 +65,7 @@
 input[type="text"], input[type="password"], input[type="number"], input[type="date"], textarea, select {
   width: 100%;
   padding: 0.7rem 1rem;
-  background: rgba(255,255,255,0.03);
+  background: var(--surface2);
   border: 1px solid rgba(255,255,255,0.08);
   color: var(--text);
   border-radius: var(--radius-sm);
@@ -73,6 +73,11 @@ input[type="text"], input[type="password"], input[type="number"], input[type="da
   font-family: inherit;
   margin-bottom: 0.5rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+select option {
+  background: var(--surface2);
+  color: var(--text);
 }
 
 input:focus, textarea:focus, select:focus {

@@ -1,8 +1,9 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import PageTransition from './PageTransition'
+import Translator from './Translator'
 import {
   LayoutDashboard, BookOpen, Layers, NotebookPen, TrendingUp,
-  Timer, Ear, CalendarRange, Settings, GraduationCap
+  Timer, Ear, CalendarRange, Settings, GraduationCap, PenLine, Languages
 } from 'lucide-react'
 
 const navItems = [
@@ -10,6 +11,8 @@ const navItems = [
   { to: '/vocab', icon: BookOpen, label: 'Vocabulary' },
   { to: '/flashcards', icon: Layers, label: 'Flashcards' },
   { to: '/notes', icon: NotebookPen, label: 'Notes' },
+  { to: '/writing', icon: PenLine, label: 'Writing' },
+  { to: '/translate', icon: Languages, label: 'Translate' },
   { to: '/dictation', icon: Ear, label: 'Dictation' },
   { to: '/calendar', icon: CalendarRange, label: 'Calendar' },
   { to: '/scores', icon: TrendingUp, label: 'Scores' },
@@ -50,6 +53,8 @@ export default function Layout() {
           <Outlet />
         </PageTransition>
       </main>
+
+      <Translator />
     </>
   )
 }
