@@ -1,10 +1,21 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { getUserCollection, addToUserCollection, deleteFromUserCollection, setUserDoc } from '../firebase/firestore'
-import { uploadImage } from '../firebase/storage'
+import { imageToBase64 } from '../firebase/storage'
 import { useToast } from '../components/Toast'
 import { CardSkeleton } from '../components/Skeleton'
 import { PenLine, Upload, Trash2, Eye, ArrowLeft, Image, Download, Pencil } from 'lucide-react'
+
+function LazyImage({ src, alt, style }) {
+  const [loaded, setLoaded] = useState(false)
+  return (
+    <div style={{ position: 'relative', minHeight: loaded ? 'auto' : 120, background: loaded ? 'transparent' : 'var(--surface2)', borderRadius: 'var(--radius-sm)', marginBottom: '1rem', overflow: 'hidden' }}>
+      {!loaded && <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text2)', fontSize: '0.8rem' }}>Đang tải ảnh...</div>}
+      <img src={src} alt={alt} loading="lazy" decoding="async" onLoad={() => setLoaded(true)}
+        style={{ ...style, display: loaded ? 'block' : 'block', opacity: loaded ? 1 : 0, transition: 'opacity 0.3s' }} />
+    </div>
+  )
+}
 
 const TASK_TYPES = { task1: 'Task 1', task2: 'Task 2' }
 const MIN_WORDS = { task1: 150, task2: 250 }
@@ -61,7 +72,6 @@ export default function WritingPage() {
   const [essay, setEssay] = useState('')
   const [note, setNote] = useState('')
   const [uploading, setUploading] = useState(false)
-  const [uploadPct, setUploadPct] = useState(0)
 
   const wordCount = useMemo(() => countWords(essay), [essay])
   const minWords = MIN_WORDS[taskType]
@@ -93,11 +103,11 @@ export default function WritingPage() {
 
   const handleSave = async () => {
     if (!essay.trim()) return toast('Viết bài trước khi lưu!')
-    setUploading(true); setUploadPct(0)
+    setUploading(true)
     try {
       let imageUrl = ''
       if (imageFile) {
-        imageUrl = await uploadImage(user.uid, imageFile, setUploadPct)
+        imageUrl = await imageToBase64(imageFile) || ''
       }
       await addToUserCollection(user.uid, 'writing', {
         taskType,
@@ -110,8 +120,8 @@ export default function WritingPage() {
       })
       resetForm()
       setPhase('list')
-      await refresh()
       toast('Đã lưu bài viết!')
+      refresh()
     } catch (e) {
       console.error(e)
       toast('Lỗi khi lưu!')
@@ -142,11 +152,11 @@ export default function WritingPage() {
 
   const handleUpdate = async () => {
     if (!essay.trim()) return toast('Viết bài trước khi lưu!')
-    setUploading(true); setUploadPct(0)
+    setUploading(true)
     try {
       let imageUrl = viewing.imageUrl || ''
       if (imageFile) {
-        imageUrl = await uploadImage(user.uid, imageFile, setUploadPct)
+        imageUrl = await imageToBase64(imageFile) || ''
       }
       await setUserDoc(user.uid, `writing/${viewing.id}`, {
         taskType,
@@ -158,8 +168,8 @@ export default function WritingPage() {
       })
       resetForm()
       setPhase('list')
-      await refresh()
       toast('Đã cập nhật!')
+      refresh()
     } catch (e) {
       console.error(e)
       toast('Lỗi khi cập nhật!')
@@ -186,7 +196,7 @@ export default function WritingPage() {
           </div>
 
           {viewing.imageUrl && (
-            <img src={viewing.imageUrl} alt="Đề bài" style={{ width: '100%', borderRadius: 'var(--radius-sm)', marginBottom: '1rem', border: '1px solid var(--border)' }} />
+            <LazyImage src={viewing.imageUrl} alt="Đề bài" style={{ width: '100%', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }} />
           )}
 
           <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.8, fontSize: '0.9rem', marginBottom: '1rem' }}>{viewing.essay}</div>
@@ -265,9 +275,8 @@ export default function WritingPage() {
           </div>
 
           <textarea placeholder="Ghi chú / tự nhận xét" rows={2} value={note} onChange={e => setNote(e.target.value)} />
-          <button className="btn-primary" onClick={handleUpdate} disabled={uploading} style={{ width: '100%', marginTop: '0.3rem', position: 'relative', overflow: 'hidden' }}>
-            {uploading && uploadPct < 100 && <span style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${uploadPct}%`, background: 'rgba(255,255,255,0.15)', transition: 'width 0.3s', borderRadius: 'inherit' }} />}
-            {uploading ? `Đang tải... ${uploadPct}%` : 'Cập nhật bài viết'}
+          <button className="btn-primary" onClick={handleUpdate} disabled={uploading} style={{ width: '100%', marginTop: '0.3rem' }}>
+            {uploading ? 'Đang lưu...' : 'Cập nhật bài viết'}
           </button>
         </div>
       </section>
@@ -341,9 +350,8 @@ export default function WritingPage() {
           <textarea placeholder="Ghi chú / tự nhận xét (tuỳ chọn)" rows={2} value={note} onChange={e => setNote(e.target.value)} />
 
           {/* Save */}
-          <button className="btn-primary" onClick={handleSave} disabled={uploading} style={{ width: '100%', marginTop: '0.3rem', position: 'relative', overflow: 'hidden' }}>
-            {uploading && uploadPct < 100 && <span style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${uploadPct}%`, background: 'rgba(255,255,255,0.15)', transition: 'width 0.3s', borderRadius: 'inherit' }} />}
-            {uploading ? `Đang tải... ${uploadPct}%` : 'Lưu bài viết'}
+          <button className="btn-primary" onClick={handleSave} disabled={uploading} style={{ width: '100%', marginTop: '0.3rem' }}>
+            {uploading ? 'Đang lưu...' : 'Lưu bài viết'}
           </button>
         </div>
       </section>
