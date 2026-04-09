@@ -230,22 +230,28 @@
 /* ===== HEATMAP ===== */
 #heatmap {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 14px);
-  gap: 2px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
   margin-top: 0.5rem;
 }
 
 .hm-cell {
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
+  aspect-ratio: 1;
+  border-radius: 6px;
   background: var(--surface2);
   position: relative;
   cursor: default;
   transition: transform 0.1s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.hm-cell:hover { transform: scale(1.3); z-index: 2; }
+.hm-cell:hover { transform: scale(1.1); z-index: 2; }
 .hm-3 { background: var(--green); }
+.hm-today { border: 2px solid var(--accent); }
+.hm-day { font-size: 0.65rem; font-weight: 600; color: rgba(255,255,255,0.5); }
+.hm-3 .hm-day { color: #fff; }
+.hm-today .hm-day { color: var(--accent); }
 
 /* ===== CHECKLIST ===== */
 #checklist { display: flex; flex-direction: column; gap: 0.3rem; }

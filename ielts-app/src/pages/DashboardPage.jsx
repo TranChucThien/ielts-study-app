@@ -89,14 +89,24 @@ export default function DashboardPage() {
 
   const streak = useMemo(() => calcStreak(sessions), [sessions])
 
-  const heatmapDates = useMemo(() => {
-    const set = new Set(sessions.map(s => s.date))
-    const cells = []
-    for (let i = 89; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 86400000).toISOString().slice(0, 10)
-      cells.push({ date: d, active: set.has(d) })
+  const weekDays = useMemo(() => {
+    const sessionDates = new Set(sessions.map(s => s.date))
+    const now = new Date()
+    const dow = now.getDay() === 0 ? 6 : now.getDay() - 1
+    const days = []
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now)
+      d.setDate(now.getDate() - dow + i)
+      const dateStr = d.toISOString().slice(0, 10)
+      days.push({
+        label: ['T2','T3','T4','T5','T6','T7','CN'][i],
+        day: d.getDate(),
+        date: dateStr,
+        isToday: dateStr === today(),
+        hasSession: sessionDates.has(dateStr),
+      })
     }
-    return cells
+    return days
   }, [sessions])
 
   const handleCheck = async (key, checked) => {
@@ -194,15 +204,31 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Heatmap */}
-      <div className="card">
-        <h3><CalendarRange size={16} /> 90 ngày gần nhất</h3>
-        <div id="heatmap">
-          {heatmapDates.map(c => (
-            <div key={c.date} className={`hm-cell${c.active ? ' hm-3' : ''}`} title={c.date} />
-          ))}
+      {/* Week Calendar + Streak */}
+      <Link to="/calendar" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <div className="card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
+            <h3 style={{ margin: 0 }}><CalendarRange size={16} /> Tuần này</h3>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text2)' }}>Xem lịch ›</span>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, textAlign: 'center' }}>
+            {weekDays.map(d => (
+              <div key={d.date} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: '0.6rem', color: 'var(--text2)', textTransform: 'uppercase' }}>{d.label}</span>
+                <div style={{
+                  width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '0.8rem', fontWeight: d.isToday ? 700 : 500,
+                  background: d.isToday ? 'var(--accent)' : d.hasSession ? 'rgba(16,185,129,0.15)' : 'var(--surface2)',
+                  color: d.isToday ? '#fff' : d.hasSession ? 'var(--green)' : 'var(--text2)',
+                  border: d.isToday ? 'none' : d.hasSession ? '1px solid rgba(16,185,129,0.3)' : '1px solid transparent',
+                }}>{d.day}</div>
+                {d.hasSession && <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--green)' }} />}
+                {!d.hasSession && <div style={{ width: 5, height: 5 }} />}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </Link>
 
       {/* Checklist */}
       <div className="card">
